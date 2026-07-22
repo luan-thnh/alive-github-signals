@@ -10,9 +10,12 @@ const endpoints = [
   ["/api/profile", "Identity card with optional embedded avatar"],
   ["/api/terminal", "Developer identity as a live terminal"],
   ["/api/badge", "Data-driven compact metric badge"],
-  ["/api/button", "Static README CTA artwork"],
+  ["/api/button", "CTA artwork with custom action or social icons"],
+  ["/api/social", "Custom Alive icons for social links and contact rails"],
   ["/api/status", "Availability and broadcast status"],
 ];
+
+const socialPlatforms = ["github", "youtube", "facebook", "linkedin", "instagram", "tiktok", "x", "discord", "telegram", "zalo", "website", "email"];
 
 const capabilities = [
   ["QUERY NATIVE", "Username, repository, theme, colors, dimensions and composition are controlled through URL parameters."],
@@ -101,8 +104,33 @@ export default function HomePage() {
 
       <Builder />
 
+      <section className="social-lab" id="socials">
+        <div className="section-rail"><span>04 / SOCIAL GLYPHS</span><span>CUSTOM SVG / NO ICON LIBRARY</span></div>
+        <div className="social-lab-head">
+          <h2>ONE SYSTEM.<br /><em>TWELVE CHANNELS.</em></h2>
+          <p>Every social glyph is drawn as native SVG geometry and inherits the same grid, brackets, signal dots and theme tokens as the statistics cards.</p>
+        </div>
+        <div className="social-icon-grid">
+          {socialPlatforms.map((platform) => (
+            <article key={platform}>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={`/api/social?platform=${platform}&variant=compact&animate=true`} alt={`${platform} Alive icon`} />
+              <code>{platform}</code>
+            </article>
+          ))}
+        </div>
+        <div className="social-rail-demo">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/api/social?platform=youtube&label=YOUTUBE&handle=@luanthnh&variant=stack&animate=true" alt="YouTube social signal" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/api/social?platform=facebook&label=FACEBOOK&handle=luanthnh.dev&variant=stack&animate=true" alt="Facebook social signal" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/api/social?platform=github&label=GITHUB&handle=luan-thnh&variant=stack&animate=true" alt="GitHub social signal" />
+        </div>
+      </section>
+
       <section className="deploy" id="deploy">
-        <div className="section-rail"><span>04 / DEPLOY</span><span>VERCEL / 3 STEPS</span></div>
+        <div className="section-rail"><span>05 / DEPLOY</span><span>VERCEL / 3 STEPS</span></div>
         <div className="deploy-grid">
           <div>
             <span className="deploy-index">01</span>

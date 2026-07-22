@@ -24,6 +24,7 @@ import {
   renderProfile,
   renderRepo,
   renderSignal,
+  renderSocial,
   renderStats,
   renderStatus,
   renderStreak,
@@ -44,6 +45,7 @@ const defaults: Record<
   terminal: { width: 760, height: 370, minWidth: 600, minHeight: 340 },
   badge: { width: 220, height: 34, minWidth: 110, minHeight: 32 },
   button: { width: 240, height: 46, minWidth: 140, minHeight: 42 },
+  social: { width: 300, height: 56, minWidth: 46, minHeight: 46 },
   status: { width: 300, height: 58, minWidth: 190, minHeight: 52 },
 };
 
@@ -74,6 +76,7 @@ export const renderCard = async (
 
   try {
     if (kind === "button") return { svg: renderButton(context), context };
+    if (kind === "social") return { svg: renderSocial(context), context };
     if (kind === "status") return { svg: renderStatus(context), context };
 
     if (kind === "repo") {

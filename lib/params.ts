@@ -20,6 +20,8 @@ export const CARD_ALIASES: Record<string, CardKind> = {
   terminal: "terminal",
   badge: "badge",
   button: "button",
+  social: "social",
+  socials: "social",
   status: "status",
 };
 
@@ -98,6 +100,6 @@ export const parseList = (value: string | null): string[] =>
     .slice(0, 30);
 
 export const parseCacheSeconds = (value: string | null): number => {
-  const fallback = Number.parseInt(process.env.DEFAULT_CACHE_SECONDS ?? "21600", 10);
-  return parseInteger(value, Number.isFinite(fallback) ? fallback : 21600, 300, 86400);
+  const fallback = Number.parseInt(process.env.DEFAULT_CACHE_SECONDS ?? "300", 10);
+  return parseInteger(value, Number.isFinite(fallback) ? fallback : 300, 300, 86400);
 };

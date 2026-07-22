@@ -23,7 +23,7 @@ Optional:
 GITHUB_TOKEN_2=github_pat_xxxxxxxxxxxxxxxxxxxx
 GITHUB_TOKEN_3=github_pat_xxxxxxxxxxxxxxxxxxxx
 NEXT_PUBLIC_SITE_URL=https://your-domain.vercel.app
-DEFAULT_CACHE_SECONDS=21600
+DEFAULT_CACHE_SECONDS=300
 ```
 
 Tokens stay on the server and are never rendered into SVG output or client-side

@@ -11,6 +11,7 @@ test("card aliases resolve to canonical card kinds", () => {
   assert.equal(parseCardKind("top-langs"), "languages");
   assert.equal(parseCardKind("pin"), "repo");
   assert.equal(parseCardKind("signal"), "signal");
+  assert.equal(parseCardKind("social"), "social");
   assert.equal(parseCardKind("unknown"), null);
 });
 

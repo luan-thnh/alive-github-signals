@@ -10,6 +10,7 @@ import {
   renderProfile,
   renderRepo,
   renderSignal,
+  renderSocial,
   renderStats,
   renderStatus,
   renderTerminal,
@@ -31,6 +32,9 @@ write("profile", renderProfile(demoProfile, buildContext("profile", new URLSearc
 write("activity", renderActivity(demoProfile, buildContext("activity", new URLSearchParams())));
 write("terminal", renderTerminal(demoProfile, buildContext("terminal", new URLSearchParams({ animate: "true" }))));
 write("badge", renderBadge(demoProfile, buildContext("badge", new URLSearchParams({ metric: "commits", label: "COMMITS" }))));
+write("social-youtube", renderSocial(buildContext("social", new URLSearchParams({ platform: "youtube", label: "YOUTUBE", handle: "@luanthnh", variant: "stack", animate: "true" }))));
+write("social-facebook", renderSocial(buildContext("social", new URLSearchParams({ platform: "facebook", label: "FACEBOOK", handle: "luanthnh.dev", variant: "bracket" }))));
+write("social-icons", renderSocial(buildContext("social", new URLSearchParams({ platform: "instagram", variant: "compact" }))));
 write("button", renderButton(buildContext("button", new URLSearchParams({ label: "VIEW SYSTEM", variant: "bracket" }))));
 write("status", renderStatus(buildContext("status", new URLSearchParams({ label: "AVAILABLE FOR WORK", state: "online", animate: "true" }))));
 

@@ -9,6 +9,7 @@ export type CardKind =
   | "terminal"
   | "badge"
   | "button"
+  | "social"
   | "status";
 
 export type ThemeName = "alive" | "paper" | "cobalt" | "ember" | "mono";

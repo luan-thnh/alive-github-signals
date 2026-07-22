@@ -22,7 +22,7 @@ Markdown or HTML.
 | `width` / `height` | Bounded SVG dimensions | `width=900` |
 | `title` | Accessible custom title | `title=My+Signal` |
 | `animate` | Enable SVG pulse/scan animation | `true` |
-| `cache_seconds` | CDN cache, 300–86400 seconds | `3600` |
+| `cache_seconds` | CDN cache, 300–86400 seconds; default 300 | `300` |
 | `demo` | Use built-in sample data without a token | `true` |
 | `download` | Return an attachment header | `1` |
 | `period` | `year` or `all` commit count | `all` |
@@ -135,6 +135,22 @@ state text.
 ## Cache behavior
 
 The server requests fresh data from GitHub on a cache miss. Vercel's CDN then
-caches the generated SVG according to `cache_seconds`. The default is six hours.
-Use a lower value such as `300` for faster updates, while keeping GitHub API rate
-limits in mind.
+caches the generated SVG according to `cache_seconds`. The default is five minutes (`300` seconds). Increase the value for high-traffic deployments to preserve GitHub API rate limits.
+
+
+## Social
+
+```text
+GET /api/social
+```
+
+Parameters:
+
+- `platform`: `github`, `youtube`, `facebook`, `linkedin`, `instagram`, `tiktok`, `x`, `discord`, `telegram`, `zalo`, `website`, `email`
+- `label`: main uppercase label
+- `handle`: account name, URL hint, or contact detail
+- `variant`: `rail`, `bracket`, `stack`, `compact`
+- `brand=true`: use the platform accent color
+- Common theme, color, size, and animation parameters remain supported.
+
+The `/api/button` endpoint accepts the same platform names through `icon=`.

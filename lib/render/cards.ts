@@ -1,6 +1,14 @@
 import { parseInteger, safeText } from "../params";
 import type { ProfileData, RenderContext, RepoData, Theme } from "../types";
 import {
+  isSocialPlatform,
+  platformLabel,
+  SOCIAL_BRAND_COLORS,
+  socialIcon,
+  simpleActionIcon,
+  type SocialPlatform,
+} from "./social-icons";
+import {
   escapeXml,
   formatNumber,
   headerRail,
@@ -446,23 +454,66 @@ export const renderBadge = (
 export const renderButton = (context: RenderContext): string => {
   const { theme, params } = context;
   const label = safeText(params.get("label"), "VIEW SYSTEM", 34).toUpperCase();
-  const icon = safeText(params.get("icon"), "arrow", 16);
+  const icon = safeText(params.get("icon"), "arrow", 20).toLowerCase();
   const variant = safeText(params.get("variant"), "rail", 20);
-  const width = parseInteger(params.get("width"), Math.max(190, label.length * 10 + 72), 140, 560);
+  const width = parseInteger(params.get("width"), Math.max(190, label.length * 10 + 82), 140, 560);
   const height = 46;
-  const iconGlyph: Record<string, string> = { arrow: "↗", github: "GH", code: "</>", plus: "+", play: "▶" };
-  const glyph = iconGlyph[icon] ?? "↗";
   const shape = variant === "bracket"
     ? `<path d="M12 1H${width - 1}V${height - 12}L${width - 12} ${height - 1}H1V12Z" fill="${theme.surface}" stroke="${theme.border}"/>`
     : `<rect x="1" y="1" width="${width - 2}" height="${height - 2}" fill="${theme.surface}" stroke="${theme.border}"/>`;
+  const iconSvg = isSocialPlatform(icon)
+    ? socialIcon({ platform: icon, x: width - 43, y: 11, size: 24, theme, frame: false })
+    : simpleActionIcon({ icon, x: width - 43, y: 11, size: 24, theme });
   const body = `
     ${shape}
     <rect x="1" y="1" width="7" height="${height - 2}" fill="${theme.accent}"/>
     <text x="24" y="29" class="mono text" font-size="12" font-weight="700" letter-spacing="1.4">${escapeXml(label)}</text>
-    <line x1="${width - 56}" y1="10" x2="${width - 56}" y2="${height - 10}" stroke="${theme.border}"/>
-    <text x="${width - 29}" y="29" text-anchor="middle" class="mono accent" font-size="14">${escapeXml(glyph)}</text>
+    <line x1="${width - 58}" y1="10" x2="${width - 58}" y2="${height - 10}" stroke="${theme.border}"/>
+    ${iconSvg}
   `;
   return svgDocument({ width, height, theme, body, title: label, description: "Alive Interface button artwork", animate: context.animate });
+};
+
+export const renderSocial = (context: RenderContext): string => {
+  const { theme, params } = context;
+  const requested = safeText(params.get("platform"), "github", 20).toLowerCase();
+  const platform: SocialPlatform = isSocialPlatform(requested) ? requested : "github";
+  const label = safeText(params.get("label"), platformLabel(platform), 34).toUpperCase();
+  const handle = safeText(params.get("handle") ?? params.get("username"), "", 46);
+  const variant = safeText(params.get("variant"), "rail", 20).toLowerCase();
+  const brand = ["1", "true", "yes", "on"].includes((params.get("brand") ?? "").toLowerCase());
+  const iconColor = brand ? SOCIAL_BRAND_COLORS[platform] : theme.accent;
+
+  if (variant === "compact") {
+    const size = parseInteger(params.get("width"), 58, 46, 120);
+    const body = `
+      <rect x="1" y="1" width="${size - 2}" height="${size - 2}" fill="${theme.surface}" stroke="${theme.border}"/>
+      <path d="M1 14V1H14M${size - 14} 1H${size - 1}V14M${size - 1} ${size - 14}V${size - 1}H${size - 14}" stroke="${iconColor}"/>
+      ${socialIcon({ platform, x: Math.round((size - 28) / 2), y: Math.round((size - 28) / 2), size: 28, theme, color: iconColor, frame: false })}
+    `;
+    return svgDocument({ width: size, height: size, theme, body, title: label, description: `${label} Alive Interface social icon`, animate: context.animate });
+  }
+
+  const width = parseInteger(params.get("width"), Math.max(250, 118 + label.length * 8 + handle.length * 6), 210, 620);
+  const height = variant === "stack" ? 72 : 56;
+  const frame = variant === "bracket"
+    ? `<path d="M13 1H${width - 1}V${height - 13}L${width - 13} ${height - 1}H1V13Z" fill="${theme.surface}" stroke="${theme.border}"/>`
+    : `<rect x="1" y="1" width="${width - 2}" height="${height - 2}" fill="${theme.surface}" stroke="${theme.border}"/>`;
+  const iconSize = height === 72 ? 34 : 28;
+  const iconY = Math.round((height - iconSize) / 2);
+  const textY = handle ? (height === 72 ? 29 : 23) : Math.round(height / 2 + 4);
+  const body = `
+    ${frame}
+    <rect x="1" y="1" width="6" height="${height - 2}" fill="${iconColor}"/>
+    <rect x="14" y="${iconY - 5}" width="${iconSize + 10}" height="${iconSize + 10}" fill="${theme.background}" stroke="${theme.border}"/>
+    ${socialIcon({ platform, x: 19, y: iconY, size: iconSize, theme, color: iconColor, frame: false })}
+    <line x1="${iconSize + 34}" y1="10" x2="${iconSize + 34}" y2="${height - 10}" stroke="${theme.border}"/>
+    <text x="${iconSize + 50}" y="${textY}" class="mono text" font-size="11" font-weight="700" letter-spacing="1.5">${escapeXml(label)}</text>
+    ${handle ? `<text x="${iconSize + 50}" y="${textY + 19}" class="mono micro">${escapeXml(handle)}</text>` : ""}
+    <circle cx="${width - 43}" cy="${Math.round(height / 2)}" r="3" fill="${iconColor}" class="pulse"/>
+    <path d="M${width - 30} ${Math.round(height / 2)}H${width - 14}M${width - 20} ${Math.round(height / 2) - 6}L${width - 14} ${Math.round(height / 2)}L${width - 20} ${Math.round(height / 2) + 6}" stroke="${iconColor}"/>
+  `;
+  return svgDocument({ width, height, theme, body, title: label, description: `${label} Alive Interface social button`, animate: context.animate });
 };
 
 export const renderStatus = (context: RenderContext): string => {

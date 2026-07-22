@@ -150,7 +150,7 @@ width          SVG width, bounded per request
 height         SVG height, bounded per request
 title          Accessible custom title
 animate        true to enable SVG-native motion
-cache_seconds  300–86400, default 21600
+cache_seconds  300–86400, default 300
 period         year | all
 exclude_langs  Comma-separated language names
 repo_pages     1–5 repository pages for language aggregation
@@ -164,8 +164,7 @@ On a cache miss, the route handler requests current data from GitHub and renders
 an SVG response. The generated image is cached by Vercel's CDN. This gives you
 updated cards without forcing every README view to consume GitHub API quota.
 
-The default cache duration is six hours. Use `cache_seconds=300` for faster
-updates or a longer duration for public/high-traffic deployments.
+The default cache duration is five minutes (`300` seconds). Increase it for public or high-traffic deployments to preserve GitHub API quota.
 
 `period=all` uses GitHub commit search to estimate all-time authored commits.
 The default period is the last twelve months because it is faster and more
@@ -213,3 +212,28 @@ npm run build
 ## License
 
 MIT © luanthnh
+
+
+## Live builder behavior
+
+The web builder uses live GitHub data by default with a five-minute CDN cache and a manual cache-busting refresh control. The **Demo data** toggle is opt-in and clearly marks the preview as demo. Username and repository input are debounced before a request is made, and the preview offers a cache-busting refresh control.
+
+![Alive social signals](docs/alive-social-signals-gallery.png)
+
+## Social SVG endpoint
+
+```text
+/api/social?platform=youtube&label=YOUTUBE&handle=@luanthnh&variant=stack
+/api/social?platform=facebook&label=FACEBOOK&handle=luanthnh.dev&variant=bracket
+/api/social?platform=instagram&variant=compact
+/api/button?label=WATCH+CHANNEL&icon=youtube&variant=bracket
+```
+
+Supported platforms:
+
+```text
+github, youtube, facebook, linkedin, instagram, tiktok, x,
+discord, telegram, zalo, website, email
+```
+
+The glyphs are custom SVG geometry and do not depend on an icon package. Use `brand=true` to use a recognizable platform color while preserving the Alive Interface composition.

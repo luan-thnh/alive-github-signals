@@ -28,6 +28,7 @@ export async function GET(
           "terminal",
           "badge",
           "button",
+          "social",
           "status",
         ],
       },

@@ -2,7 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { demoProfile } from "../lib/demo";
 import { buildContext } from "../lib/render";
-import { renderBadge, renderSignal, renderStats } from "../lib/render/cards";
+import { renderBadge, renderSignal, renderSocial, renderStats } from "../lib/render/cards";
 
 test("signal renderer emits accessible SVG and escapes title input", () => {
   const params = new URLSearchParams({ title: "<unsafe>&title", demo: "true" });
@@ -28,4 +28,14 @@ test("badge renderer can use a live profile metric", () => {
   const svg = renderBadge(demoProfile, context);
   assert.match(svg, /COMMITS/);
   assert.match(svg, /340/);
+});
+
+
+test("social renderer emits custom themed YouTube geometry", () => {
+  const params = new URLSearchParams({ platform: "youtube", label: "YouTube", handle: "@luanthnh", variant: "stack" });
+  const context = buildContext("social", params);
+  const svg = renderSocial(context);
+  assert.match(svg, /YOUTUBE/);
+  assert.match(svg, /@luanthnh/);
+  assert.match(svg, /Alive Interface social button/);
 });
