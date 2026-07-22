@@ -7,7 +7,7 @@ export function GET(): Response {
       status: "ok",
       service: "alive-github-signals",
       time: new Date().toISOString(),
-      tokenConfigured: Boolean(process.env.GITHUB_TOKEN),
+      tokenConfigured: Object.entries(process.env).some(([key, value]) => /^GITHUB_TOKEN(?:_\d+)?$/.test(key) && Boolean(value)),
     },
     {
       headers: {

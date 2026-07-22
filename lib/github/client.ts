@@ -74,6 +74,9 @@ const profileQuery = `
       name
       bio
       avatarUrl
+      websiteUrl
+      email
+      twitterUsername
       createdAt
       followers { totalCount }
       following { totalCount }
@@ -111,8 +114,14 @@ const profileQuery = `
         totalCount
         pageInfo { hasNextPage endCursor }
         nodes {
+          name
+          description
+          url
+          updatedAt
+          isArchived
           stargazerCount
           forkCount
+          primaryLanguage { name }
           languages(first: 10, orderBy: { field: SIZE, direction: DESC }) {
             edges { size node { name } }
           }
@@ -128,6 +137,9 @@ type ProfileGraph = {
     name: string | null;
     bio: string | null;
     avatarUrl: string;
+    websiteUrl: string | null;
+    email: string | null;
+    twitterUsername: string | null;
     createdAt: string;
     followers: { totalCount: number };
     following: { totalCount: number };
@@ -156,8 +168,14 @@ type ProfileGraph = {
       totalCount: number;
       pageInfo: { hasNextPage: boolean; endCursor: string | null };
       nodes: Array<{
+        name: string;
+        description: string | null;
+        url: string;
+        updatedAt: string;
+        isArchived: boolean;
         stargazerCount: number;
         forkCount: number;
+        primaryLanguage: { name: string } | null;
         languages: {
           edges: Array<{ size: number; node: { name: string } }>;
         };
@@ -235,6 +253,7 @@ export const fetchProfileData = async (
   let stars = 0;
   let forks = 0;
   const languageSizes = new Map<string, number>();
+  const recentRepositories: ProfileData["recentRepositories"] = [];
   const maxPages = Math.min(5, Math.max(1, options?.maxRepoPages ?? 3));
 
   for (let page = 0; page < maxPages; page += 1) {
@@ -247,6 +266,18 @@ export const fetchProfileData = async (
     if (!firstUser) firstUser = result.user;
 
     for (const repo of result.user.repositories.nodes) {
+      if (page === 0 && recentRepositories.length < 12) {
+        recentRepositories.push({
+          name: repo.name,
+          description: repo.description,
+          url: repo.url,
+          updatedAt: repo.updatedAt,
+          stars: repo.stargazerCount,
+          forks: repo.forkCount,
+          primaryLanguage: repo.primaryLanguage?.name ?? null,
+          isArchived: repo.isArchived,
+        });
+      }
       stars += repo.stargazerCount;
       forks += repo.forkCount;
       for (const edge of repo.languages.edges) {
@@ -281,6 +312,10 @@ export const fetchProfileData = async (
     name: firstUser.name,
     bio: firstUser.bio,
     avatarUrl: firstUser.avatarUrl,
+    websiteUrl: firstUser.websiteUrl,
+    email: firstUser.email || null,
+    twitterUsername: firstUser.twitterUsername,
+    socialAccounts: [],
     createdAt: firstUser.createdAt,
     followers: firstUser.followers.totalCount,
     following: firstUser.following.totalCount,
@@ -303,6 +338,7 @@ export const fetchProfileData = async (
       options?.excludeLanguages ?? [],
     ),
     calendar,
+    recentRepositories,
   };
 };
 
@@ -377,6 +413,32 @@ export const fetchRepoData = async (
       percentage: (edge.size / total) * 100,
     })),
   };
+};
+
+
+export const fetchSocialAccounts = async (
+  username: string,
+): Promise<Array<{ provider: string; url: string; displayName: string | null }>> => {
+  const token = selectToken();
+  const response = await fetch(
+    `${API}/users/${encodeURIComponent(username)}/social_accounts?per_page=100`,
+    {
+      headers: githubHeaders(token),
+      cache: "no-store",
+    },
+  );
+  if (!response.ok) await throwGithubError(response);
+  const accounts = (await response.json()) as Array<{
+    provider?: string;
+    url?: string;
+  }>;
+  return accounts
+    .filter((account) => account.provider && account.url)
+    .map((account) => ({
+      provider: account.provider!,
+      url: account.url!,
+      displayName: null,
+    }));
 };
 
 export const fetchAvatarDataUri = async (

@@ -10,7 +10,15 @@ export type CardKind =
   | "badge"
   | "button"
   | "social"
-  | "status";
+  | "status"
+  | "pulse"
+  | "radar"
+  | "constellation"
+  | "timeline"
+  | "repos"
+  | "year"
+  | "compare"
+  | "ticker";
 
 export type ThemeName = "alive" | "paper" | "cobalt" | "ember" | "mono";
 
@@ -26,11 +34,32 @@ export type LanguageStat = {
   percentage: number;
 };
 
+export type SocialAccount = {
+  provider: string;
+  url: string;
+  displayName: string | null;
+};
+
+export type RecentRepository = {
+  name: string;
+  description: string | null;
+  url: string;
+  updatedAt: string;
+  stars: number;
+  forks: number;
+  primaryLanguage: string | null;
+  isArchived: boolean;
+};
+
 export type ProfileData = {
   login: string;
   name: string | null;
   bio: string | null;
   avatarUrl: string;
+  websiteUrl: string | null;
+  email: string | null;
+  twitterUsername: string | null;
+  socialAccounts: SocialAccount[];
   createdAt: string;
   followers: number;
   following: number;
@@ -48,6 +77,7 @@ export type ProfileData = {
   longestStreak: number;
   languages: LanguageStat[];
   calendar: CalendarDay[];
+  recentRepositories: RecentRepository[];
 };
 
 export type RepoData = {

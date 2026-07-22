@@ -1,74 +1,51 @@
-# API reference
+# Alive GitHub Signals API
 
-Every card endpoint responds with `image/svg+xml` and can be embedded directly in
-Markdown or HTML.
+Base URL:
 
-```md
-![Alive signal](https://your-domain.vercel.app/api/signal?username=luan-thnh)
+```text
+https://your-domain.vercel.app
 ```
 
-## Shared parameters
+All user-backed routes require `username` and fetch real GitHub data. Responses
+are SVG images unless the route is `/api/health`.
 
-| Parameter | Purpose | Example |
-|---|---|---|
-| `username` | GitHub login | `luan-thnh` |
-| `theme` | `alive`, `paper`, `cobalt`, `ember`, `mono` | `alive` |
-| `accent` | Custom hex without `#` | `C8FF4D` |
-| `accent2` | Secondary custom hex | `F3F0EA` |
-| `bg` | Background hex | `090B0E` |
-| `text` | Main text hex | `F3F0EA` |
-| `muted` | Supporting text hex | `94978F` |
-| `border` | Border hex | `2B302D` |
-| `width` / `height` | Bounded SVG dimensions | `width=900` |
-| `title` | Accessible custom title | `title=My+Signal` |
-| `animate` | Enable SVG pulse/scan animation | `true` |
-| `cache_seconds` | CDN cache, 300–86400 seconds; default 300 | `300` |
-| `demo` | Use built-in sample data without a token | `true` |
-| `download` | Return an attachment header | `1` |
-| `period` | `year` or `all` commit count | `all` |
-| `exclude_langs` | Comma-separated languages | `HTML,CSS` |
-| `repo_pages` | Repository pages to aggregate, 1–5 | `3` |
+## Profile systems
 
-## Endpoints
+### `/api/signal`
+
+Full Alive Interface system panel.
+
+```text
+/api/signal?username=luan-thnh&theme=alive&animate=true
+```
 
 ### `/api/stats`
 
 ```text
 /api/stats?username=luan-thnh&variant=editorial
-/api/stats?username=luan-thnh&variant=orbit&theme=cobalt
+/api/stats?username=luan-thnh&variant=orbit
 ```
 
-`/api` is a compatibility alias for `/api/stats`.
+Parameters: `variant=editorial|orbit`, `period=year|all`.
 
-### `/api/languages`
+### `/api/radar`
+
+Six-axis activity radar derived from real metrics. The polygon uses logarithmic
+normalization so very large GitHub accounts remain readable.
 
 ```text
-/api/languages?username=luan-thnh&layout=field&langs_count=6
-/api/top-langs?username=luan-thnh&layout=orbit
+/api/radar?username=luan-thnh
 ```
 
-Aliases: `/api/top-langs`, `/api/langs`.
+Axes: code, ship, collaboration, impact, streak and activity.
 
-### `/api/repo`
+### `/api/compare`
 
 ```text
-/api/repo?username=luan-thnh&repo=music-player
-/api/pin?username=luan-thnh&repo=music-player
+/api/compare?username=luan-thnh&compare_username=torvalds
 ```
 
-### `/api/streak`
-
-```text
-/api/streak?username=luan-thnh&theme=alive
-```
-
-### `/api/activity`
-
-```text
-/api/activity?username=luan-thnh&width=1000
-```
-
-Alias: `/api/calendar`.
+`compare_username` is required.
 
 ### `/api/profile`
 
@@ -76,81 +53,152 @@ Alias: `/api/calendar`.
 /api/profile?username=luan-thnh&avatar=true
 ```
 
-`avatar=true` fetches the GitHub avatar server-side and embeds it as a data URI.
-
-### `/api/signal`
-
-The full Alive Interface composition.
-
-```text
-/api/signal?username=luan-thnh&animate=true
-```
+`avatar=true` embeds the public GitHub avatar into the SVG.
 
 ### `/api/terminal`
 
 ```text
-/api/terminal?username=luan-thnh&theme=mono
+/api/terminal?username=luan-thnh
 ```
+
+## Activity systems
+
+### `/api/pulse`
+
+```text
+/api/pulse?username=luan-thnh
+```
+
+Compact real 52-week contribution waveform.
+
+### `/api/timeline`
+
+```text
+/api/timeline?username=luan-thnh
+```
+
+Aggregates the contribution calendar into the latest twelve months.
+
+### `/api/year`
+
+```text
+/api/year?username=luan-thnh
+```
+
+Displays total contributions, active days, strongest month, longest streak,
+daily average and primary language.
+
+### `/api/activity`
+
+```text
+/api/activity?username=luan-thnh
+```
+
+### `/api/streak`
+
+```text
+/api/streak?username=luan-thnh
+```
+
+### `/api/ticker`
+
+```text
+/api/ticker?username=luan-thnh&width=1100
+```
+
+Animated compact metric ticker.
+
+## Code and repository systems
+
+### `/api/languages`
+
+```text
+/api/languages?username=luan-thnh&layout=field&langs_count=6
+/api/languages?username=luan-thnh&layout=orbit&langs_count=8
+```
+
+### `/api/constellation`
+
+```text
+/api/constellation?username=luan-thnh&langs_count=8
+```
+
+Language node size is based on real repository language percentage.
+
+### `/api/repos`
+
+```text
+/api/repos?username=luan-thnh&count=6
+/api/repos?username=luan-thnh&count=8&include_archived=true
+```
+
+Repositories are ordered by GitHub `UPDATED_AT`.
+
+### `/api/repo`
+
+```text
+/api/repo?username=luan-thnh&repo=music-player
+```
+
+## Compact utilities
 
 ### `/api/badge`
 
-Data-driven metrics:
-
 ```text
 /api/badge?username=luan-thnh&metric=commits&label=COMMITS
-/api/badge?username=luan-thnh&metric=followers&variant=bracket
 ```
 
-Supported metrics: `commits`, `contributions`, `stars`, `followers`, `repos`,
+Real metrics: `commits`, `contributions`, `stars`, `followers`, `repos`,
 `repositories`, `prs`, `issues`, `streak`.
 
-Static badge:
+### `/api/social`
 
 ```text
-/api/badge?label=BUILD&value=PASSING
+/api/social?username=luan-thnh&platform=github&variant=stack
 ```
+
+Platforms: `github`, `youtube`, `facebook`, `linkedin`, `instagram`, `tiktok`,
+`x`, `discord`, `telegram`, `zalo`, `website`, `email`.
+
+The account must be publicly available through the selected GitHub profile.
 
 ### `/api/button`
 
-Buttons are SVG artwork. Wrap them in a Markdown or HTML link to make them
-clickable.
-
-```md
-[![Portfolio](https://your-domain.vercel.app/api/button?label=VIEW+PORTFOLIO)](https://example.com)
+```text
+/api/button?label=VIEW+PROJECT&icon=github&variant=bracket
 ```
 
-Parameters: `label`, `icon=arrow|github|code|plus|play`,
-`variant=rail|bracket`, `width`.
+This route renders query-controlled artwork and does not claim GitHub metrics.
 
 ### `/api/status`
 
 ```text
 /api/status?label=AVAILABLE+FOR+WORK&state=online
-/api/status?label=FOCUS+MODE&state=busy&theme=ember
 ```
 
-States: `online`, `busy`, `offline`, `error`. Use `value` to override the visible
-state text.
+## Shared parameters
 
-## Cache behavior
+| Parameter | Description |
+|---|---|
+| `username` | Real GitHub login |
+| `theme` | `alive`, `paper`, `cobalt`, `ember`, `mono` |
+| `animate` | Defaults to `true` |
+| `accent` | Primary custom hex color |
+| `accent2` | Secondary custom hex color |
+| `bg` | Background color |
+| `text` | Main text color |
+| `muted` | Secondary text color |
+| `border` | Border color |
+| `width` | Bounded SVG width |
+| `height` | Bounded SVG height |
+| `title` | Accessible custom title |
+| `period` | `year` or `all` |
+| `exclude_langs` | Comma-separated languages |
+| `repo_pages` | Repository pages used for aggregation, 1–5 |
+| `cache_seconds` | CDN cache, 300–86400 seconds |
+| `download` | `1` sends SVG as an attachment |
 
-The server requests fresh data from GitHub on a cache miss. Vercel's CDN then
-caches the generated SVG according to `cache_seconds`. The default is five minutes (`300` seconds). Increase the value for high-traffic deployments to preserve GitHub API rate limits.
+## Errors
 
-
-## Social
-
-```text
-GET /api/social
-```
-
-Parameters:
-
-- `platform`: `github`, `youtube`, `facebook`, `linkedin`, `instagram`, `tiktok`, `x`, `discord`, `telegram`, `zalo`, `website`, `email`
-- `label`: main uppercase label
-- `handle`: account name, URL hint, or contact detail
-- `variant`: `rail`, `bracket`, `stack`, `compact`
-- `brand=true`: use the platform accent color
-- Common theme, color, size, and animation parameters remain supported.
-
-The `/api/button` endpoint accepts the same platform names through `icon=`.
+Invalid queries and GitHub failures are returned as designed SVG error cards.
+No user-backed endpoint substitutes bundled values.

@@ -5,45 +5,75 @@ import { useEffect, useMemo, useState, type ChangeEvent } from "react";
 type Endpoint =
   | "signal"
   | "stats"
+  | "pulse"
+  | "radar"
   | "languages"
-  | "repo"
+  | "constellation"
+  | "timeline"
+  | "year"
   | "streak"
   | "activity"
+  | "repos"
+  | "repo"
+  | "compare"
   | "profile"
   | "terminal"
+  | "ticker"
   | "badge"
-  | "button"
   | "social"
+  | "button"
   | "status";
 
 type PreviewState = "loading" | "ready" | "error";
 
-const endpointOptions: Array<{ value: Endpoint; label: string }> = [
-  { value: "signal", label: "Full Signal" },
-  { value: "stats", label: "Stats" },
-  { value: "languages", label: "Languages" },
-  { value: "repo", label: "Repository" },
-  { value: "streak", label: "Streak" },
-  { value: "activity", label: "Activity" },
-  { value: "profile", label: "Profile" },
-  { value: "terminal", label: "Terminal" },
-  { value: "badge", label: "Badge" },
-  { value: "button", label: "Button" },
-  { value: "social", label: "Social Button" },
-  { value: "status", label: "Status" },
+type EndpointOption = {
+  value: Endpoint;
+  label: string;
+  group: "Profile" | "Activity" | "Repository" | "Compact";
+};
+
+const endpointOptions: EndpointOption[] = [
+  { value: "signal", label: "Full Signal Panel", group: "Profile" },
+  { value: "stats", label: "Core Statistics", group: "Profile" },
+  { value: "radar", label: "Developer Radar", group: "Profile" },
+  { value: "compare", label: "User Comparison", group: "Profile" },
+  { value: "profile", label: "Profile Identity", group: "Profile" },
+  { value: "terminal", label: "Terminal Identity", group: "Profile" },
+  { value: "pulse", label: "Contribution Pulse", group: "Activity" },
+  { value: "timeline", label: "12-Month Timeline", group: "Activity" },
+  { value: "year", label: "Year In Code", group: "Activity" },
+  { value: "streak", label: "Streak Index", group: "Activity" },
+  { value: "activity", label: "Contribution Calendar", group: "Activity" },
+  { value: "languages", label: "Language Field", group: "Activity" },
+  { value: "constellation", label: "Language Constellation", group: "Activity" },
+  { value: "repos", label: "Recent Repository Stack", group: "Repository" },
+  { value: "repo", label: "Repository Specimen", group: "Repository" },
+  { value: "ticker", label: "Live Metrics Ticker", group: "Compact" },
+  { value: "badge", label: "Metric Badge", group: "Compact" },
+  { value: "social", label: "GitHub Social Signal", group: "Compact" },
+  { value: "button", label: "Action Button", group: "Compact" },
+  { value: "status", label: "Status Broadcast", group: "Compact" },
 ];
 
 const socialOptions = [
   "github", "youtube", "facebook", "linkedin", "instagram", "tiktok",
   "x", "discord", "telegram", "zalo", "website", "email",
 ];
-
 const iconOptions = ["arrow", "code", "plus", "play", ...socialOptions];
+const metricOptions = [
+  "contributions", "commits", "stars", "followers", "repositories",
+  "prs", "issues", "streak",
+];
 
 const requiresUsername = (endpoint: Endpoint): boolean =>
-  !["button", "social", "status"].includes(endpoint);
+  !["button", "status"].includes(endpoint);
+const supportsPeriod = (endpoint: Endpoint): boolean =>
+  !["button", "status", "social", "repo"].includes(endpoint);
+const supportsLanguageCount = (endpoint: Endpoint): boolean =>
+  ["languages", "constellation"].includes(endpoint);
+const supportsCount = (endpoint: Endpoint): boolean => endpoint === "repos";
 
-function useDebouncedValue<T>(value: T, delay = 500): T {
+function useDebouncedValue<T>(value: T, delay = 520): T {
   const [debounced, setDebounced] = useState(value);
   useEffect(() => {
     const timer = window.setTimeout(() => setDebounced(value), delay);
@@ -56,44 +86,49 @@ export function Builder() {
   const [origin, setOrigin] = useState("https://your-domain.vercel.app");
   const [endpoint, setEndpoint] = useState<Endpoint>("signal");
   const [username, setUsername] = useState("luan-thnh");
-  const [repo, setRepo] = useState("alive-github-signals");
+  const [compareUsername, setCompareUsername] = useState("torvalds");
+  const [repo, setRepo] = useState("music-player");
   const [theme, setTheme] = useState("alive");
   const [variant, setVariant] = useState("editorial");
   const [accent, setAccent] = useState("C8FF4D");
   const [title, setTitle] = useState("");
   const [animate, setAnimate] = useState(true);
-  const [demo, setDemo] = useState(false);
   const [socialPlatform, setSocialPlatform] = useState("github");
-  const [handle, setHandle] = useState("@luan-thnh");
   const [buttonIcon, setButtonIcon] = useState("arrow");
   const [brandColor, setBrandColor] = useState(false);
   const [period, setPeriod] = useState<"year" | "all">("year");
+  const [count, setCount] = useState(6);
+  const [languageCount, setLanguageCount] = useState(8);
+  const [badgeMetric, setBadgeMetric] = useState("contributions");
   const [previewState, setPreviewState] = useState<PreviewState>("loading");
   const [refreshNonce, setRefreshNonce] = useState(0);
   const [copied, setCopied] = useState<"url" | "markdown" | "html" | null>(null);
 
   useEffect(() => setOrigin(window.location.origin), []);
 
-  const deferredUsername = useDebouncedValue(username.trim(), 520);
-  const deferredRepo = useDebouncedValue(repo.trim(), 520);
+  const deferredUsername = useDebouncedValue(username.trim());
+  const deferredCompareUsername = useDebouncedValue(compareUsername.trim());
+  const deferredRepo = useDebouncedValue(repo.trim());
 
   const url = useMemo(() => {
     const params = new URLSearchParams();
     if (requiresUsername(endpoint)) params.set("username", deferredUsername || "luan-thnh");
-    if (endpoint === "repo") params.set("repo", deferredRepo || "alive-github-signals");
+    if (endpoint === "compare") params.set("compare_username", deferredCompareUsername || "torvalds");
+    if (endpoint === "repo") params.set("repo", deferredRepo || "music-player");
     params.set("theme", theme);
+    params.set("animate", String(animate));
+    params.set("cache_seconds", "300");
     if (accent && accent.toUpperCase() !== "C8FF4D") params.set("accent", accent.replace(/^#/, ""));
     if (title) params.set("title", title);
-    if (animate) params.set("animate", "true");
-    if (demo && requiresUsername(endpoint)) params.set("demo", "true");
-    if (requiresUsername(endpoint)) params.set("period", period);
-    if (requiresUsername(endpoint)) params.set("cache_seconds", "300");
+    if (supportsPeriod(endpoint)) params.set("period", period);
+    if (supportsLanguageCount(endpoint)) params.set("langs_count", String(languageCount));
+    if (supportsCount(endpoint)) params.set("count", String(count));
 
     if (endpoint === "stats") params.set("variant", variant);
     if (endpoint === "languages") params.set("layout", variant === "orbit" ? "orbit" : "field");
     if (endpoint === "badge") {
-      params.set("metric", "commits");
-      params.set("label", title || "COMMITS");
+      params.set("metric", badgeMetric);
+      params.set("label", title || badgeMetric.toUpperCase());
       params.set("variant", variant === "bracket" ? "bracket" : "signal");
     }
     if (endpoint === "button") {
@@ -104,7 +139,6 @@ export function Builder() {
     if (endpoint === "social") {
       params.set("platform", socialPlatform);
       params.set("label", title || socialPlatform.toUpperCase());
-      if (handle) params.set("handle", handle);
       params.set("variant", ["bracket", "compact", "stack"].includes(variant) ? variant : "rail");
       if (brandColor) params.set("brand", "true");
     }
@@ -115,7 +149,11 @@ export function Builder() {
     if (endpoint === "profile") params.set("avatar", "true");
 
     return `${origin}/api/${endpoint}?${params.toString()}`;
-  }, [accent, animate, brandColor, buttonIcon, deferredRepo, deferredUsername, demo, endpoint, handle, origin, period, socialPlatform, theme, title, variant]);
+  }, [
+    accent, animate, badgeMetric, brandColor, buttonIcon, count,
+    deferredCompareUsername, deferredRepo, deferredUsername, endpoint,
+    languageCount, origin, period, socialPlatform, theme, title, variant,
+  ]);
 
   const previewUrl = useMemo(() => {
     const separator = url.includes("?") ? "&" : "?";
@@ -130,9 +168,9 @@ export function Builder() {
   const changeEndpoint = (next: Endpoint) => {
     setEndpoint(next);
     if (next === "social") setVariant("stack");
-    else if (next === "button") setVariant("bracket");
-    else if (next === "languages") setVariant("editorial");
-    else if (!["editorial", "orbit", "bracket"].includes(variant)) setVariant("editorial");
+    else if (["button", "badge"].includes(next)) setVariant("bracket");
+    else if (["languages", "constellation"].includes(next)) setVariant("orbit");
+    else setVariant("editorial");
   };
 
   const copy = async (type: "url" | "markdown" | "html", value: string) => {
@@ -141,11 +179,13 @@ export function Builder() {
     window.setTimeout(() => setCopied(null), 1400);
   };
 
+  const groups = ["Profile", "Activity", "Repository", "Compact"] as const;
+
   return (
     <section className="builder" id="builder">
       <div className="section-rail">
-        <span>03 / SIGNAL BUILDER</span>
-        <span>QUERY → SVG → README</span>
+        <span>03 / LIVE BUILDER</span>
+        <span>QUERY PARAMETERS → SVG</span>
       </div>
 
       <div className="builder-grid">
@@ -153,16 +193,20 @@ export function Builder() {
           <div className="control-heading">
             <span className="signal-dot" />
             <div>
-              <strong>Compose an endpoint</strong>
-              <small>Live GitHub data is the default. Inputs are debounced to protect API limits.</small>
+              <strong>Generate a real GitHub component</strong>
+              <small>Every user metric is fetched from GitHub. Errors stay errors; no bundled profile or number fallback is used.</small>
             </div>
           </div>
 
           <label>
-            <span>Card type</span>
+            <span>Component</span>
             <select value={endpoint} onChange={(event: ChangeEvent<HTMLSelectElement>) => changeEndpoint(event.target.value as Endpoint)}>
-              {endpointOptions.map((option) => (
-                <option key={option.value} value={option.value}>{option.label}</option>
+              {groups.map((group) => (
+                <optgroup key={group} label={group}>
+                  {endpointOptions.filter((option) => option.group === group).map((option) => (
+                    <option key={option.value} value={option.value}>{option.label}</option>
+                  ))}
+                </optgroup>
               ))}
             </select>
           </label>
@@ -170,38 +214,65 @@ export function Builder() {
           {requiresUsername(endpoint) && (
             <label>
               <span>GitHub username</span>
-              <input value={username} onChange={(event: ChangeEvent<HTMLInputElement>) => setUsername(event.target.value)} spellCheck={false} />
+              <input value={username} onChange={(event) => setUsername(event.target.value)} spellCheck={false} />
+            </label>
+          )}
+
+          {endpoint === "compare" && (
+            <label>
+              <span>Compare with GitHub user</span>
+              <input value={compareUsername} onChange={(event) => setCompareUsername(event.target.value)} spellCheck={false} />
             </label>
           )}
 
           {endpoint === "repo" && (
             <label>
-              <span>Repository</span>
-              <input value={repo} onChange={(event: ChangeEvent<HTMLInputElement>) => setRepo(event.target.value)} spellCheck={false} />
+              <span>Repository owned by user</span>
+              <input value={repo} onChange={(event) => setRepo(event.target.value)} spellCheck={false} />
             </label>
           )}
 
           {endpoint === "social" && (
-            <div className="control-pair">
+            <>
               <label>
-                <span>Social network</span>
-                <select value={socialPlatform} onChange={(event: ChangeEvent<HTMLSelectElement>) => setSocialPlatform(event.target.value)}>
+                <span>Network published on GitHub profile</span>
+                <select value={socialPlatform} onChange={(event) => setSocialPlatform(event.target.value)}>
                   {socialOptions.map((platform) => <option key={platform} value={platform}>{platform.toUpperCase()}</option>)}
                 </select>
               </label>
-              <label>
-                <span>Handle / detail</span>
-                <input value={handle} onChange={(event: ChangeEvent<HTMLInputElement>) => setHandle(event.target.value)} placeholder="@username" />
-              </label>
-            </div>
+              <div className="live-data-note">The destination and handle are resolved from the selected user&apos;s public GitHub profile.</div>
+            </>
           )}
 
-          {requiresUsername(endpoint) && (
+          {supportsPeriod(endpoint) && (
             <label>
               <span>Commit period</span>
-              <select value={period} onChange={(event: ChangeEvent<HTMLSelectElement>) => setPeriod(event.target.value as "year" | "all")}>
+              <select value={period} onChange={(event) => setPeriod(event.target.value as "year" | "all")}>
                 <option value="year">Last 12 months</option>
                 <option value="all">All-time authored commits</option>
+              </select>
+            </label>
+          )}
+
+          {supportsCount(endpoint) && (
+            <label>
+              <span>Repositories shown</span>
+              <input type="number" min={2} max={10} value={count} onChange={(event) => setCount(Number(event.target.value))} />
+            </label>
+          )}
+
+          {supportsLanguageCount(endpoint) && (
+            <label>
+              <span>Languages shown</span>
+              <input type="number" min={3} max={12} value={languageCount} onChange={(event) => setLanguageCount(Number(event.target.value))} />
+            </label>
+          )}
+
+          {endpoint === "badge" && (
+            <label>
+              <span>Real metric</span>
+              <select value={badgeMetric} onChange={(event) => setBadgeMetric(event.target.value)}>
+                {metricOptions.map((metric) => <option key={metric} value={metric}>{metric.toUpperCase()}</option>)}
               </select>
             </label>
           )}
@@ -209,7 +280,7 @@ export function Builder() {
           {endpoint === "button" && (
             <label>
               <span>Button icon</span>
-              <select value={buttonIcon} onChange={(event: ChangeEvent<HTMLSelectElement>) => setButtonIcon(event.target.value)}>
+              <select value={buttonIcon} onChange={(event) => setButtonIcon(event.target.value)}>
                 {iconOptions.map((icon) => <option key={icon} value={icon}>{icon.toUpperCase()}</option>)}
               </select>
             </label>
@@ -218,7 +289,7 @@ export function Builder() {
           <div className="control-pair">
             <label>
               <span>Theme</span>
-              <select value={theme} onChange={(event: ChangeEvent<HTMLSelectElement>) => setTheme(event.target.value)}>
+              <select value={theme} onChange={(event) => setTheme(event.target.value)}>
                 <option value="alive">Alive Acid</option>
                 <option value="paper">Alive Paper</option>
                 <option value="cobalt">Alive Cobalt</option>
@@ -228,12 +299,12 @@ export function Builder() {
             </label>
             <label>
               <span>Composition</span>
-              <select value={variant} onChange={(event: ChangeEvent<HTMLSelectElement>) => setVariant(event.target.value)}>
-                <option value="editorial">Editorial / Rail</option>
+              <select value={variant} onChange={(event) => setVariant(event.target.value)}>
+                <option value="editorial">Editorial</option>
                 <option value="orbit">Orbit</option>
                 <option value="bracket">Bracket</option>
-                {endpoint === "social" && <option value="compact">Compact Icon</option>}
-                {endpoint === "social" && <option value="stack">Stacked Social</option>}
+                {endpoint === "social" && <option value="compact">Compact</option>}
+                {endpoint === "social" && <option value="stack">Stacked</option>}
               </select>
             </label>
           </div>
@@ -241,69 +312,44 @@ export function Builder() {
           <div className="control-pair">
             <label>
               <span>Accent hex</span>
-              <input value={accent} onChange={(event: ChangeEvent<HTMLInputElement>) => setAccent(event.target.value)} spellCheck={false} maxLength={8} />
+              <input value={accent} onChange={(event) => setAccent(event.target.value)} spellCheck={false} maxLength={8} />
             </label>
             <label>
               <span>Custom title / label</span>
-              <input value={title} onChange={(event: ChangeEvent<HTMLInputElement>) => setTitle(event.target.value)} placeholder="optional" />
+              <input value={title} onChange={(event) => setTitle(event.target.value)} placeholder="optional" />
             </label>
           </div>
 
           <div className="toggle-row">
             <label className="toggle">
-              <input type="checkbox" checked={animate} onChange={(event: ChangeEvent<HTMLInputElement>) => setAnimate(event.target.checked)} />
+              <input type="checkbox" checked={animate} onChange={(event) => setAnimate(event.target.checked)} />
               <span /> SVG motion
             </label>
             {endpoint === "social" && (
               <label className="toggle">
-                <input type="checkbox" checked={brandColor} onChange={(event: ChangeEvent<HTMLInputElement>) => setBrandColor(event.target.checked)} />
+                <input type="checkbox" checked={brandColor} onChange={(event) => setBrandColor(event.target.checked)} />
                 <span /> Brand color
               </label>
             )}
-            {requiresUsername(endpoint) && (
-              <label className="toggle">
-                <input type="checkbox" checked={demo} onChange={(event: ChangeEvent<HTMLInputElement>) => setDemo(event.target.checked)} />
-                <span /> Demo data
-              </label>
-            )}
           </div>
-
-          {demo && requiresUsername(endpoint) && (
-            <div className="demo-warning">DEMO MODE OVERRIDES LIVE METRICS. Disable it to fetch the entered GitHub username.</div>
-          )}
         </div>
 
         <div className="builder-preview">
           <div className="preview-topline">
-            <span className={`data-source ${demo ? "is-demo" : "is-live"}`}><i /> {demo ? "DEMO DATA" : "LIVE GITHUB"}</span>
+            <span className={`data-source ${requiresUsername(endpoint) ? "is-live" : "is-static"}`}><i /> {requiresUsername(endpoint) ? "LIVE GITHUB" : "QUERY SVG"}</span>
             <span>{endpoint.toUpperCase()} / {theme.toUpperCase()}</span>
             <button className="refresh-preview" type="button" onClick={() => setRefreshNonce(Date.now())}>REFRESH ↻</button>
           </div>
           <div className={`preview-stage is-${previewState}`}>
-            {previewState === "loading" && <div className="preview-loader"><span /> FETCHING SIGNAL</div>}
-            {previewState === "error" && <div className="preview-loader is-error">PREVIEW IMAGE FAILED TO LOAD</div>}
+            {previewState === "loading" && <div className="preview-loader"><span /> FETCHING GITHUB</div>}
+            {previewState === "error" && <div className="preview-loader is-error">SVG REQUEST FAILED — CHECK TOKEN OR QUERY</div>}
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              key={previewUrl}
-              src={previewUrl}
-              alt={`Alive ${endpoint} preview`}
-              onLoad={() => setPreviewState("ready")}
-              onError={() => setPreviewState("error")}
-            />
+            <img key={previewUrl} src={previewUrl} alt={`Alive ${endpoint} preview`} onLoad={() => setPreviewState("ready")} onError={() => setPreviewState("error")} />
           </div>
           <div className="output-stack">
-            <div className="output-row">
-              <code>{url}</code>
-              <button type="button" onClick={() => copy("url", url)}>{copied === "url" ? "COPIED" : "COPY URL"}</button>
-            </div>
-            <div className="output-row">
-              <code>{markdown}</code>
-              <button type="button" onClick={() => copy("markdown", markdown)}>{copied === "markdown" ? "COPIED" : "MARKDOWN"}</button>
-            </div>
-            <div className="output-row">
-              <code>{html}</code>
-              <button type="button" onClick={() => copy("html", html)}>{copied === "html" ? "COPIED" : "HTML"}</button>
-            </div>
+            <div className="output-row"><code>{url}</code><button type="button" onClick={() => copy("url", url)}>{copied === "url" ? "COPIED" : "COPY URL"}</button></div>
+            <div className="output-row"><code>{markdown}</code><button type="button" onClick={() => copy("markdown", markdown)}>{copied === "markdown" ? "COPIED" : "MARKDOWN"}</button></div>
+            <div className="output-row"><code>{html}</code><button type="button" onClick={() => copy("html", html)}>{copied === "html" ? "COPIED" : "HTML"}</button></div>
           </div>
         </div>
       </div>

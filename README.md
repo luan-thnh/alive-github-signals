@@ -1,77 +1,63 @@
 <div align="center">
   <img src="public/mark.svg" width="82" alt="Alive GitHub Signals mark" />
   <h1>Alive GitHub Signals</h1>
-  <p><strong>Dynamic GitHub badges, buttons and statistics cards as an editorial living interface.</strong></p>
+  <p><strong>A Vercel-ready API for animated GitHub SVG components powered by real GitHub data.</strong></p>
   <p>
-    <a href="#api-endpoints">API</a> ·
-    <a href="#query-parameters">Parameters</a> ·
-    <a href="docs/DEPLOY.md">Deploy</a> ·
-    <a href="docs/THEMES.md">Themes</a>
+    <a href="#quick-start">Quick start</a> ·
+    <a href="#svg-endpoints">Endpoints</a> ·
+    <a href="docs/API.md">API reference</a> ·
+    <a href="docs/DEPLOY.md">Deploy</a>
   </p>
 </div>
 
-![Alive GitHub Signal preview](docs/previews/signal.svg)
+## Product
 
-## What this is
-
-Alive GitHub Signals is a Vercel-ready SVG generation service. Deploy the
-repository once, pass a GitHub username through a URL, and embed the returned
-artwork anywhere an image is accepted.
+Deploy this repository once, pass a GitHub username through query parameters,
+and embed the returned SVG directly in a README, documentation page, portfolio
+or repository landing page.
 
 ```md
-![GitHub signal](https://your-domain.vercel.app/api/signal?username=luan-thnh)
+![GitHub radar](https://your-domain.vercel.app/api/radar?username=luan-thnh)
 ```
 
-It follows the same useful URL-driven model as GitHub statistics services, but
-uses an original **Alive Interface** art direction:
+The project is not a collection of static screenshots. Each user-backed endpoint:
 
-- editorial and Swiss-inspired layout
-- hard geometry instead of generic rounded SaaS cards
-- living grids, waveforms, orbital systems and technical annotations
-- five coordinated theme presets plus custom colors
-- multiple compositions rather than one card with different data
-- SVG-native optional animation
+1. validates the request,
+2. fetches current GitHub GraphQL or REST data,
+3. renders an original Alive Interface SVG,
+4. returns it through a cacheable Vercel route.
 
-The renderer and API implementation are original. The project is conceptually
-inspired by the dynamic README ecosystem, including GitHub Stats Extended.
+There is no bundled sample profile, bundled user values or fallback account. GitHub failures
+produce an explicit error SVG.
 
-## Highlights
+## What is new in v1.3
 
-- **11 endpoints:** stats, languages, repo, streak, activity, profile, full
-  signal, terminal, badge, button and status.
-- **Current GitHub data:** GraphQL profile, repository, contribution, language
-  and streak information.
-- **URL customization:** themes, custom colors, dimensions, titles, animation,
-  language exclusions and cache control.
-- **Compatibility aliases:** `/api`, `/api/top-langs`, `/api/pin`,
-  `/api/calendar`.
-- **Token rotation:** add `GITHUB_TOKEN_2`, `GITHUB_TOKEN_3`, and so on.
-- **No database:** deploy directly to Vercel.
-- **Builder UI:** visual endpoint configurator with live URL, Markdown and HTML
-  output.
-- **Safe rendering:** query validation, XML escaping, bounded dimensions and
-  server-only credentials.
+Eight new real-data components:
 
-## Gallery
+- **Developer Radar** — six-axis activity map derived from real GitHub metrics.
+- **Language Constellation** — animated language nodes weighted by repository code mass.
+- **Contribution Pulse** — compact 52-week contribution waveform.
+- **Contribution Timeline** — twelve-month contribution skyline.
+- **Repository Stack** — recently updated repositories with language, stars and forks.
+- **Year In Code** — active days, strongest month, streak and primary language.
+- **Signal Compare** — real GitHub user-versus-user comparison.
+- **Metrics Ticker** — animated compact line of live profile metrics.
 
-<table>
-  <tr>
-    <td><img src="docs/previews/stats-editorial.svg" alt="Editorial stats" /></td>
-    <td><img src="docs/previews/stats-orbit.svg" alt="Orbital stats" /></td>
-  </tr>
-  <tr>
-    <td><img src="docs/previews/languages-field.svg" alt="Language field" /></td>
-    <td><img src="docs/previews/languages-orbit.svg" alt="Language orbit" /></td>
-  </tr>
-</table>
+The landing page was also rewritten around the product: live endpoint examples,
+API categories, request flow, builder, data contract and deployment.
 
-![Repository specimen](docs/previews/repo.svg)
+## Core features
 
-<div align="center">
-  <img src="docs/previews/badge.svg" alt="Metric badge" />
-  <img src="docs/previews/button.svg" alt="README button" />
-  <img src="docs/previews/status.svg" alt="Availability status" />
-</div>
+- 20 canonical SVG endpoints plus compatibility aliases.
+- Real GitHub profile, repository, contribution, streak, language and social data.
+- Native SVG animation enabled by default.
+- Five coordinated themes and query-level color overrides.
+- Visual builder that outputs URL, Markdown and HTML.
+- GitHub token rotation through `GITHUB_TOKEN_2`, `GITHUB_TOKEN_3`, and so on.
+- Vercel CDN cache control using `cache_seconds`.
+- No database and no client-side token exposure.
+- Designed error SVGs for invalid queries, missing users and rate limits.
+- `prefers-reduced-motion` support in every animated SVG.
 
 ## Quick start
 
@@ -83,157 +69,196 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Set a server-side GitHub token in `.env.local`:
+Create `.env.local`:
 
 ```env
 GITHUB_TOKEN=github_pat_xxxxxxxxxxxxxxxxxxxx
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
+NEXT_PUBLIC_REPOSITORY_URL=https://github.com/YOUR_USERNAME/alive-github-signals
+DEFAULT_CACHE_SECONDS=300
 ```
 
-Open `http://localhost:3000` for the visual builder.
+Open `http://localhost:3000` to use the live builder.
 
 ## Deploy to Vercel
 
-1. Push the source to a GitHub repository.
-2. Import the repository in Vercel.
-3. Add `GITHUB_TOKEN` in **Settings → Environment Variables**.
-4. Deploy.
-5. Open `/api/health`, then test `/api/signal?username=YOUR_USERNAME`.
+1. Push this source to a GitHub repository.
+2. Import the repository into Vercel.
+3. Add `GITHUB_TOKEN` as a server-side environment variable.
+4. Set `NEXT_PUBLIC_SITE_URL` with the complete `https://` URL.
+5. Deploy and open `/api/health`.
+6. Test `/api/signal?username=YOUR_USERNAME`.
 
-Full deployment instructions: [docs/DEPLOY.md](docs/DEPLOY.md).
+Full instructions: [docs/DEPLOY.md](docs/DEPLOY.md).
 
-## API endpoints
+## SVG endpoints
+
+### Profile systems
 
 | Endpoint | Output |
 |---|---|
-| `/api` or `/api/stats` | Editorial or orbital core statistics |
-| `/api/languages` | Language field or language orbit |
-| `/api/repo` | Repository specimen card |
-| `/api/streak` | Current and longest streak |
+| `/api/signal` | Full editorial GitHub system panel |
+| `/api/stats` | Core metrics in editorial or orbit layouts |
+| `/api/radar` | Developer activity radar |
+| `/api/compare` | User-versus-user comparison |
+| `/api/profile` | Profile identity card with optional avatar |
+| `/api/terminal` | GitHub identity rendered as a terminal |
+
+### Activity systems
+
+| Endpoint | Output |
+|---|---|
+| `/api/pulse` | 52-week contribution waveform |
+| `/api/timeline` | Twelve-month contribution skyline |
+| `/api/year` | Year In Code recap |
 | `/api/activity` | Contribution calendar trace |
-| `/api/profile` | Identity card with optional embedded avatar |
-| `/api/signal` | Full Alive Interface system panel |
-| `/api/terminal` | Live developer terminal |
-| `/api/badge` | Compact static or data-driven badge |
-| `/api/button` | README CTA artwork |
-| `/api/status` | Availability/status broadcast |
+| `/api/streak` | Current and longest streak |
+| `/api/ticker` | Animated compact metric ticker |
 
-Complete examples: [docs/API.md](docs/API.md).
+### Code and repositories
 
-### Examples
+| Endpoint | Output |
+|---|---|
+| `/api/languages` | Language field or orbit |
+| `/api/constellation` | Animated language constellation |
+| `/api/repos` | Recently updated repository stack |
+| `/api/repo` | Single repository specimen |
+
+### README utilities
+
+| Endpoint | Output |
+|---|---|
+| `/api/badge` | Real compact GitHub metric badge |
+| `/api/social` | Social link published on the GitHub profile |
+| `/api/button` | Query-controlled SVG action button |
+| `/api/status` | Availability or broadcast status |
+
+Compatibility aliases include `/api`, `/api/top-langs`, `/api/pin`,
+`/api/calendar`, `/api/repo-stack`, `/api/year-in-code` and `/api/marquee`.
+
+## Examples
 
 ```text
-/api/stats?username=luan-thnh&variant=editorial
-/api/stats?username=luan-thnh&variant=orbit&theme=cobalt
-/api/languages?username=luan-thnh&layout=orbit&langs_count=6
+/api/radar?username=luan-thnh&animate=true
+/api/constellation?username=luan-thnh&langs_count=8
+/api/timeline?username=luan-thnh&theme=cobalt
+/api/repos?username=luan-thnh&count=6
+/api/year?username=luan-thnh
+/api/pulse?username=luan-thnh&width=980
+/api/compare?username=luan-thnh&compare_username=torvalds
+/api/ticker?username=luan-thnh
 /api/repo?username=luan-thnh&repo=music-player
-/api/profile?username=luan-thnh&avatar=true
-/api/badge?username=luan-thnh&metric=commits&label=COMMITS
-/api/status?label=AVAILABLE+FOR+WORK&state=online
+/api/badge?username=luan-thnh&metric=contributions&label=CONTRIBUTIONS
+/api/social?username=luan-thnh&platform=github&variant=stack
 ```
 
-## Query parameters
-
-Shared parameters include:
+## Shared query parameters
 
 ```text
-username       GitHub login
-repo           Repository name for /api/repo
-theme          alive | paper | cobalt | ember | mono
-accent         Custom hex color without #
-accent2        Secondary hex color
-bg             Background color
-text           Main text color
-muted          Secondary text color
-border         Border color
-width          SVG width, bounded per request
-height         SVG height, bounded per request
-title          Accessible custom title
-animate        true to enable SVG-native motion
-cache_seconds  300–86400, default 300
-period         year | all
-exclude_langs  Comma-separated language names
-repo_pages     1–5 repository pages for language aggregation
-demo           true to use bundled preview data
-download       1 to send SVG as an attachment
+username          GitHub login used as the real data source
+compare_username  Second GitHub login for /api/compare
+repo              Repository name for /api/repo
+count             Repository count for /api/repos, 2–10
+langs_count       Language count for language endpoints
+theme             alive | paper | cobalt | ember | mono
+accent            Custom hexadecimal accent color
+accent2           Secondary hexadecimal color
+bg                 Background color
+text               Primary text color
+muted              Secondary text color
+border             Border color
+width / height     Bounded SVG dimensions
+title              Accessible custom title
+animate            true by default; false disables SVG motion
+period             year | all
+exclude_langs      Comma-separated languages to exclude
+repo_pages         1–5 repository pages used for aggregation
+cache_seconds      300–86400 seconds
+download           1 returns SVG as an attachment
 ```
 
-## Dynamic data and caching
+Complete endpoint-specific parameters: [docs/API.md](docs/API.md).
 
-On a cache miss, the route handler requests current data from GitHub and renders
-an SVG response. The generated image is cached by Vercel's CDN. This gives you
-updated cards without forcing every README view to consume GitHub API quota.
+## Animation system
 
-The default cache duration is five minutes (`300` seconds). Increase it for public or high-traffic deployments to preserve GitHub API quota.
+Every SVG can include:
 
-`period=all` uses GitHub commit search to estimate all-time authored commits.
-The default period is the last twelve months because it is faster and more
-consistent with GitHub's contribution data.
+- moving technical grid,
+- scan beam,
+- frame and line drawing,
+- staggered metric reveal,
+- contribution heat pulses,
+- animated waveforms,
+- orbiting language geometry,
+- floating constellation nodes,
+- radar polygon reveal,
+- social icon breathing,
+- compact ticker motion.
+
+Motion is enabled by default. Use `animate=false` for a static asset.
+
+## Data contract
+
+User-backed endpoints always require `username`. The service does not substitute
+fake metrics when a token, user, repository or social account is unavailable.
+Instead it returns an `ERR / SIGNAL INTERRUPTED` SVG containing the real failure.
+
+`/api/social` resolves the requested public account from the GitHub profile.
+It does not accept a fabricated handle as a data fallback.
+
+## Caching
+
+The GitHub API is called on a cache miss. Vercel then caches the generated SVG.
+The default is 300 seconds. Increase `cache_seconds` on high-traffic deployments
+to preserve GitHub API quota.
 
 ## Project structure
 
 ```text
 app/
-  api/[card]/route.ts       Dynamic SVG endpoint dispatcher
+  api/[card]/route.ts       Endpoint dispatcher
   api/health/route.ts       Deployment health check
-  page.tsx                  Alive Interface builder website
+  page.tsx                  Product landing and live examples
 components/
-  Builder.tsx               Query/Markdown/HTML generator
+  Builder.tsx               Query, Markdown and HTML generator
 lib/
-  github/client.ts          GitHub GraphQL + REST data layer
-  render/cards.ts           Original SVG compositions
-  render/svg.ts             Shared visual primitives
-  themes.ts                 Theme tokens and custom palette resolver
+  github/client.ts          GitHub GraphQL and REST client
+  render/cards.ts           SVG component renderers
+  render/svg.ts             Shared motion and visual primitives
+  themes.ts                 Theme tokens
+scripts/
+  render-live-previews.ts   Token-required real preview generator
 docs/
   API.md
   DEPLOY.md
   THEMES.md
-scripts/
-  render-previews.ts
+  VALIDATION.md
 ```
 
-## Development checks
+## Checks
 
 ```bash
-npm run preview:generate
 npm run typecheck
 npm test
 npm run build
 ```
 
+Generate local previews from a real user:
+
+```bash
+GITHUB_TOKEN=github_pat_xxx \
+LIVE_PREVIEW_USERNAME=luan-thnh \
+npm run preview:generate
+```
+
 ## Security
 
-- Never prefix the GitHub token with `NEXT_PUBLIC_`.
-- Tokens are selected only inside server route handlers.
-- Query text is bounded and XML-escaped before rendering.
-- Width, height and cache duration are clamped.
-- Use minimum token permissions and rotate leaked credentials immediately.
+- Never expose the token with a `NEXT_PUBLIC_` prefix.
+- Use minimum GitHub token permissions.
+- Rotate leaked tokens immediately.
+- Query text is bounded and XML-escaped.
+- Dimensions and cache duration are clamped.
 
 ## License
 
 MIT © luanthnh
-
-
-## Live builder behavior
-
-The web builder uses live GitHub data by default with a five-minute CDN cache and a manual cache-busting refresh control. The **Demo data** toggle is opt-in and clearly marks the preview as demo. Username and repository input are debounced before a request is made, and the preview offers a cache-busting refresh control.
-
-![Alive social signals](docs/alive-social-signals-gallery.png)
-
-## Social SVG endpoint
-
-```text
-/api/social?platform=youtube&label=YOUTUBE&handle=@luanthnh&variant=stack
-/api/social?platform=facebook&label=FACEBOOK&handle=luanthnh.dev&variant=bracket
-/api/social?platform=instagram&variant=compact
-/api/button?label=WATCH+CHANNEL&icon=youtube&variant=bracket
-```
-
-Supported platforms:
-
-```text
-github, youtube, facebook, linkedin, instagram, tiktok, x,
-discord, telegram, zalo, website, email
-```
-
-The glyphs are custom SVG geometry and do not depend on an icon package. Use `brand=true` to use a recognizable platform color while preserving the Alive Interface composition.

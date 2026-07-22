@@ -15,13 +15,13 @@ const siteUrl = normalizeSiteUrl(
 export const metadata: Metadata = {
   title: "Alive GitHub Signals",
   description:
-    "Dynamic GitHub badges, buttons and statistics cards rendered as expressive Alive Interface SVGs.",
+    "Animated GitHub SVG components generated from real profile, activity, language and repository data.",
   icons: { icon: "/mark.svg" },
   metadataBase: new URL(siteUrl),
   openGraph: {
     title: "Alive GitHub Signals",
     description:
-      "GitHub data rendered as an editorial living interface, ready for README files.",
+      "A Vercel-ready API for animated GitHub README components powered by real GitHub data.",
     type: "website",
   },
 };

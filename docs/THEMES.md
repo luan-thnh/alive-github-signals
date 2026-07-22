@@ -42,6 +42,5 @@ because renderers derive controlled opacity variants from the base colors.
 
 ## Motion
 
-Add `animate=true` to enable small SVG-native animations such as status pulses,
-terminal cursor blinking and signal drift. Static output remains the default for
-maximum README compatibility and reduced-motion safety.
+SVG-native motion is enabled by default. Use `animate=false` for a static asset.
+Every animated component includes a `prefers-reduced-motion` fallback.

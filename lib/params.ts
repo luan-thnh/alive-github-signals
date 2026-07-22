@@ -23,6 +23,24 @@ export const CARD_ALIASES: Record<string, CardKind> = {
   social: "social",
   socials: "social",
   status: "status",
+  pulse: "pulse",
+  heartbeat: "pulse",
+  radar: "radar",
+  spectrum: "radar",
+  constellation: "constellation",
+  galaxy: "constellation",
+  timeline: "timeline",
+  history: "timeline",
+  repos: "repos",
+  "repo-stack": "repos",
+  showcase: "repos",
+  year: "year",
+  "year-in-code": "year",
+  recap: "year",
+  compare: "compare",
+  versus: "compare",
+  ticker: "ticker",
+  marquee: "ticker",
 };
 
 export const parseCardKind = (value: string): CardKind | null =>
@@ -62,6 +80,19 @@ export const optionalUsername = (params: URLSearchParams): string | null => {
   if (!value) return null;
   if (!USERNAME.test(value)) throw new Error("Invalid GitHub username.");
   return value;
+};
+
+
+export const requireCompareUsername = (params: URLSearchParams): string => {
+  const username = safeText(
+    params.get("compare_username") ?? params.get("with"),
+    "",
+    39,
+  );
+  if (!USERNAME.test(username)) {
+    throw new Error("A valid compare_username is required.");
+  }
+  return username;
 };
 
 export const requireRepo = (params: URLSearchParams): string => {
