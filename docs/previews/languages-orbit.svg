@@ -1,0 +1,76 @@
+<svg width="650" height="350" viewBox="0 0 650 350" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">luan-thnh / language field</title>
+  <desc id="desc">Orbital programming language card</desc>
+  
+  <defs>
+    <pattern id="alive-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" stroke="#FFF2EA" stroke-opacity=".035"/>
+    </pattern>
+    <linearGradient id="alive-accent" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#FF6542"/>
+      <stop offset="1" stop-color="#FFB454" stop-opacity=".22"/>
+    </linearGradient>
+    <radialGradient id="alive-aura">
+      <stop stop-color="#FF6542" stop-opacity=".28"/>
+      <stop offset="1" stop-color="#FF6542" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="alive-glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <style>
+      .display { font-family: Arial Narrow, Helvetica Neue, Arial, sans-serif; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      .label { fill:#B29A8F; font-size:11px; letter-spacing:1.45px; }
+      .micro { fill:#6D5148; font-size:9px; letter-spacing:1.15px; }
+      .section { fill:#FFF2EA; font-size:14px; font-weight:700; letter-spacing:2.3px; }
+      .accent { fill:#FF6542; }
+      .text { fill:#FFF2EA; }
+      
+    </style>
+  </defs>
+  <rect width="650" height="350" fill="#0E0908"/>
+  <rect width="650" height="350" fill="url(#alive-grid)"/>
+  
+      
+  <rect x="14" y="14" width="622" height="322" fill="none" stroke="#3D2923"/>
+  <path d="M14 32V14H32 M618 14H636V32 M14 318V336H32 M618 336H636V318" stroke="#FF6542" stroke-width="1.5"/>
+
+      
+  <text x="36" y="48" class="mono section">02 / LANGUAGE ORBIT</text>
+  <line x1="36" y1="70" x2="614" y2="70" stroke="#3D2923"/>
+  <circle cx="480" cy="43" r="4" fill="#FF6542" filter="url(#alive-glow)" class="pulse"/>
+  <text x="494" y="47" class="mono micro">LIVE / GITHUB API</text>
+
+      <circle cx="221.00000000000003" cy="199.49999999999997" r="120" fill="url(#alive-aura)" opacity=".6"/>
+      <circle cx="221.00000000000003" cy="199.49999999999997" r="96" stroke="#FF6542" stroke-width="7" stroke-dasharray="197.8449389524708 405.3408505367695" transform="rotate(-90 221.00000000000003 199.49999999999997)"/><circle cx="221.00000000000003" cy="199.49999999999997" r="86" stroke="#FFB454" stroke-width="7" stroke-dasharray="142.65343921420532 397.7004972032391" transform="rotate(28.08 221.00000000000003 199.49999999999997)"/><circle cx="221.00000000000003" cy="199.49999999999997" r="76" stroke="#FFF2EA" stroke-width="7" stroke-dasharray="85.95397500221674 391.5681083434318" transform="rotate(123.11999999999999 221.00000000000003 199.49999999999997)"/><circle cx="221.00000000000003" cy="199.49999999999997" r="66" stroke="#B29A8F" stroke-width="7" stroke-dasharray="43.12778394848068 371.56244632537204" transform="rotate(187.92 221.00000000000003 199.49999999999997)"/><circle cx="221.00000000000003" cy="199.49999999999997" r="56" stroke="#6D5148" stroke-width="7" stroke-dasharray="26.037519912952206 325.82085728910465" transform="rotate(225.35999999999999 221.00000000000003 199.49999999999997)"/><circle cx="221.00000000000003" cy="199.49999999999997" r="46" stroke="#3D2923" stroke-width="7" stroke-dasharray="14.451326206513047 274.5751979237479" transform="rotate(252 221.00000000000003 199.49999999999997)"/>
+      <circle cx="221.00000000000003" cy="199.49999999999997" r="26" fill="#15100E" stroke="#3D2923"/>
+      <circle cx="221.00000000000003" cy="199.49999999999997" r="5" fill="#FF6542" class="pulse"/>
+      <line x1="357.50000000000006" y1="98" x2="357.50000000000006" y2="314" stroke="#3D2923"/>
+      
+        <circle cx="396.5" cy="116" r="4" fill="#FF6542"/>
+        <text x="412.5" y="120" class="mono label">TYPESCRIPT</text>
+        <text x="610" y="120" text-anchor="end" class="mono text" font-size="11">33%</text>
+      
+        <circle cx="396.5" cy="150" r="4" fill="#FFB454"/>
+        <text x="412.5" y="154" class="mono label">JAVASCRIPT</text>
+        <text x="610" y="154" text-anchor="end" class="mono text" font-size="11">26%</text>
+      
+        <circle cx="396.5" cy="184" r="4" fill="#FFF2EA"/>
+        <text x="412.5" y="188" class="mono label">CSS</text>
+        <text x="610" y="188" text-anchor="end" class="mono text" font-size="11">18%</text>
+      
+        <circle cx="396.5" cy="218" r="4" fill="#B29A8F"/>
+        <text x="412.5" y="222" class="mono label">PYTHON</text>
+        <text x="610" y="222" text-anchor="end" class="mono text" font-size="11">10%</text>
+      
+        <circle cx="396.5" cy="252" r="4" fill="#6D5148"/>
+        <text x="412.5" y="256" class="mono label">VUE</text>
+        <text x="610" y="256" text-anchor="end" class="mono text" font-size="11">7.4%</text>
+      
+        <circle cx="396.5" cy="286" r="4" fill="#3D2923"/>
+        <text x="412.5" y="290" class="mono label">HTML</text>
+        <text x="610" y="290" text-anchor="end" class="mono text" font-size="11">5.0%</text>
+      
+    
+</svg>

@@ -1,0 +1,85 @@
+<svg width="650" height="350" viewBox="0 0 650 350" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">luan-thnh / language field</title>
+  <desc id="desc">Programming languages field card</desc>
+  
+  <defs>
+    <pattern id="alive-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" stroke="#F3F0EA" stroke-opacity=".035"/>
+    </pattern>
+    <linearGradient id="alive-accent" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#C8FF4D"/>
+      <stop offset="1" stop-color="#F3F0EA" stop-opacity=".22"/>
+    </linearGradient>
+    <radialGradient id="alive-aura">
+      <stop stop-color="#C8FF4D" stop-opacity=".28"/>
+      <stop offset="1" stop-color="#C8FF4D" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="alive-glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <style>
+      .display { font-family: Arial Narrow, Helvetica Neue, Arial, sans-serif; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      .label { fill:#94978F; font-size:11px; letter-spacing:1.45px; }
+      .micro { fill:#565B56; font-size:9px; letter-spacing:1.15px; }
+      .section { fill:#F3F0EA; font-size:14px; font-weight:700; letter-spacing:2.3px; }
+      .accent { fill:#C8FF4D; }
+      .text { fill:#F3F0EA; }
+      
+    </style>
+  </defs>
+  <rect width="650" height="350" fill="#090B0E"/>
+  <rect width="650" height="350" fill="url(#alive-grid)"/>
+  
+    
+  <rect x="14" y="14" width="622" height="322" fill="none" stroke="#2B302D"/>
+  <path d="M14 32V14H32 M618 14H636V32 M14 318V336H32 M618 336H636V318" stroke="#C8FF4D" stroke-width="1.5"/>
+
+    
+  <text x="36" y="48" class="mono section">02 / LANGUAGE FIELD</text>
+  <line x1="36" y1="70" x2="614" y2="70" stroke="#2B302D"/>
+  <circle cx="480" cy="43" r="4" fill="#C8FF4D" filter="url(#alive-glow)" class="pulse"/>
+  <text x="494" y="47" class="mono micro">LIVE / GITHUB API</text>
+
+    <text x="38" y="99" class="mono micro">MATERIAL / WEIGHT / SIGNAL DENSITY</text>
+    
+        <text x="38" y="136" class="mono label">01</text>
+        <text x="76" y="136" class="mono text" font-size="12">TYPESCRIPT</text>
+        <rect x="230" y="124" width="358" height="12" fill="#14181A"/>
+        <rect x="230" y="124" width="340" height="12" fill="#C8FF4D"/>
+        <text x="612" y="136" text-anchor="end" class="mono micro">33%</text>
+      
+        <text x="38" y="170" class="mono label">02</text>
+        <text x="76" y="170" class="mono text" font-size="12">JAVASCRIPT</text>
+        <rect x="230" y="158" width="358" height="12" fill="#14181A"/>
+        <rect x="230" y="158" width="273.6585365853659" height="12" fill="#F3F0EA"/>
+        <text x="612" y="170" text-anchor="end" class="mono micro">26%</text>
+      
+        <text x="38" y="204" class="mono label">03</text>
+        <text x="76" y="204" class="mono text" font-size="12">CSS</text>
+        <rect x="230" y="192" width="358" height="12" fill="#14181A"/>
+        <rect x="230" y="192" width="186.58536585365854" height="12" fill="#F3F0EA"/>
+        <text x="612" y="204" text-anchor="end" class="mono micro">18%</text>
+      
+        <text x="38" y="238" class="mono label">04</text>
+        <text x="76" y="238" class="mono text" font-size="12">PYTHON</text>
+        <rect x="230" y="226" width="358" height="12" fill="#14181A"/>
+        <rect x="230" y="226" width="107.80487804878051" height="12" fill="#94978F"/>
+        <text x="612" y="238" text-anchor="end" class="mono micro">10%</text>
+      
+        <text x="38" y="272" class="mono label">05</text>
+        <text x="76" y="272" class="mono text" font-size="12">VUE</text>
+        <rect x="230" y="260" width="358" height="12" fill="#14181A"/>
+        <rect x="230" y="260" width="76.70731707317074" height="12" fill="#565B56"/>
+        <text x="612" y="272" text-anchor="end" class="mono micro">7.4%</text>
+      
+        <text x="38" y="306" class="mono label">06</text>
+        <text x="76" y="306" class="mono text" font-size="12">HTML</text>
+        <rect x="230" y="294" width="358" height="12" fill="#14181A"/>
+        <rect x="230" y="294" width="51.82926829268293" height="12" fill="#2B302D"/>
+        <text x="612" y="306" text-anchor="end" class="mono micro">5.0%</text>
+      
+    <rect x="38.00" y="306" width="188.27" height="10" fill="#C8FF4D"/><rect x="226.27" y="306" width="151.54" height="10" fill="#F3F0EA"/><rect x="377.81" y="306" width="103.32" height="10" fill="#F3F0EA"/><rect x="481.13" y="306" width="59.70" height="10" fill="#94978F"/><rect x="540.82" y="306" width="42.48" height="10" fill="#565B56"/><rect x="583.30" y="306" width="28.70" height="10" fill="#2B302D"/>
+  
+</svg>

@@ -1,0 +1,73 @@
+<svg width="760" height="340" viewBox="0 0 760 340" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">luan-thnh / activity signal</title>
+  <desc id="desc">Orbital GitHub statistics card</desc>
+  
+  <defs>
+    <pattern id="alive-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" stroke="#D7E5FF" stroke-opacity=".035"/>
+    </pattern>
+    <linearGradient id="alive-accent" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#5DE1FF"/>
+      <stop offset="1" stop-color="#7B7DFF" stop-opacity=".22"/>
+    </linearGradient>
+    <radialGradient id="alive-aura">
+      <stop stop-color="#5DE1FF" stop-opacity=".28"/>
+      <stop offset="1" stop-color="#5DE1FF" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="alive-glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <style>
+      .display { font-family: Arial Narrow, Helvetica Neue, Arial, sans-serif; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      .label { fill:#8D99AE; font-size:11px; letter-spacing:1.45px; }
+      .micro { fill:#4B5872; font-size:9px; letter-spacing:1.15px; }
+      .section { fill:#F0F5FF; font-size:14px; font-weight:700; letter-spacing:2.3px; }
+      .accent { fill:#5DE1FF; }
+      .text { fill:#F0F5FF; }
+      
+    </style>
+  </defs>
+  <rect width="760" height="340" fill="#080B12"/>
+  <rect width="760" height="340" fill="url(#alive-grid)"/>
+  
+      
+  <rect x="14" y="14" width="732" height="312" fill="none" stroke="#26334D"/>
+  <path d="M14 32V14H32 M728 14H746V32 M14 308V326H32 M728 326H746V308" stroke="#5DE1FF" stroke-width="1.5"/>
+
+      
+  <text x="36" y="48" class="mono section">01 / GITHUB ORBIT</text>
+  <line x1="36" y1="70" x2="724" y2="70" stroke="#26334D"/>
+  <circle cx="590" cy="43" r="4" fill="#5DE1FF" filter="url(#alive-glow)" class="pulse"/>
+  <text x="604" y="47" class="mono micro">LIVE / GITHUB API</text>
+
+      <circle cx="235.6" cy="197.2" r="104" fill="url(#alive-aura)"/>
+      
+    <circle cx="235.6" cy="197.2" r="78" stroke="#26334D" stroke-width="8"/>
+    <circle cx="235.6" cy="197.2" r="78" stroke="#5DE1FF" stroke-width="8" stroke-linecap="square" stroke-dasharray="445.000316195687 45.08813776432072" transform="rotate(-90 235.6 197.2)"/>
+    <text x="235.6" y="201.2" text-anchor="middle" class="mono micro">12M</text>
+  
+      <text x="235.6" y="194.2" text-anchor="middle" class="display text" font-size="48" font-weight="800">454</text>
+      <text x="235.6" y="221.2" text-anchor="middle" class="mono micro">CONTRIBUTIONS</text>
+      <circle cx="333.6" cy="152.2" r="7" fill="#5DE1FF" filter="url(#alive-glow)" class="pulse"/>
+      <line x1="425.6" y1="104" x2="425.6" y2="298" stroke="#26334D"/>
+      
+  <text x="463.59999999999997" y="132" class="display" fill="#F0F5FF" font-size="32" font-weight="750" letter-spacing="-1">340</text>
+  <text x="463.59999999999997" y="155" class="mono micro">COMMITS / PERIOD</text>
+
+      
+  <text x="463.59999999999997" y="206" class="display" fill="#F0F5FF" font-size="32" font-weight="750" letter-spacing="-1">37</text>
+  <text x="463.59999999999997" y="229" class="mono micro">PULL REQUESTS</text>
+
+      
+  <text x="623.1999999999999" y="132" class="display" fill="#F0F5FF" font-size="32" font-weight="750" letter-spacing="-1">12</text>
+  <text x="623.1999999999999" y="155" class="mono micro">STARS EARNED</text>
+
+      
+  <text x="623.1999999999999" y="206" class="display" fill="#F0F5FF" font-size="32" font-weight="750" letter-spacing="-1">22</text>
+  <text x="623.1999999999999" y="229" class="mono micro">REVIEWS</text>
+
+      <text x="718" y="312" text-anchor="end" class="mono micro">GITHUB.COM/LUAN-THNH</text>
+    
+</svg>

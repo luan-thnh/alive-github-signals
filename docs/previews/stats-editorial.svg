@@ -1,0 +1,69 @@
+<svg width="760" height="340" viewBox="0 0 760 340" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">luan-thnh / activity signal</title>
+  <desc id="desc">Editorial GitHub statistics card</desc>
+  
+  <defs>
+    <pattern id="alive-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+      <path d="M28 0H0V28" stroke="#F3F0EA" stroke-opacity=".035"/>
+    </pattern>
+    <linearGradient id="alive-accent" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#C8FF4D"/>
+      <stop offset="1" stop-color="#F3F0EA" stop-opacity=".22"/>
+    </linearGradient>
+    <radialGradient id="alive-aura">
+      <stop stop-color="#C8FF4D" stop-opacity=".28"/>
+      <stop offset="1" stop-color="#C8FF4D" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="alive-glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <style>
+      .display { font-family: Arial Narrow, Helvetica Neue, Arial, sans-serif; }
+      .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+      .label { fill:#94978F; font-size:11px; letter-spacing:1.45px; }
+      .micro { fill:#565B56; font-size:9px; letter-spacing:1.15px; }
+      .section { fill:#F3F0EA; font-size:14px; font-weight:700; letter-spacing:2.3px; }
+      .accent { fill:#C8FF4D; }
+      .text { fill:#F3F0EA; }
+      
+    </style>
+  </defs>
+  <rect width="760" height="340" fill="#090B0E"/>
+  <rect width="760" height="340" fill="url(#alive-grid)"/>
+  
+    
+  <rect x="14" y="14" width="732" height="312" fill="none" stroke="#2B302D"/>
+  <path d="M14 32V14H32 M728 14H746V32 M14 308V326H32 M728 326H746V308" stroke="#C8FF4D" stroke-width="1.5"/>
+
+    
+  <text x="36" y="48" class="mono section">01 / GITHUB SIGNAL</text>
+  <line x1="36" y1="70" x2="724" y2="70" stroke="#2B302D"/>
+  <circle cx="590" cy="43" r="4" fill="#C8FF4D" filter="url(#alive-glow)" class="pulse"/>
+  <text x="604" y="47" class="mono micro">LIVE / GITHUB API</text>
+
+    <text x="36" y="102" class="mono label">ACTIVITY / LAST 12 MONTHS</text>
+    <text x="34" y="204" class="display text" font-size="108" font-weight="800" letter-spacing="-5">454</text>
+    <text x="40" y="232" class="mono micro">CONTRIBUTIONS RECORDED</text>
+    <line x1="357" y1="94" x2="357" y2="296" stroke="#2B302D"/>
+    
+  <text x="395.2" y="126" class="display" fill="#F3F0EA" font-size="32" font-weight="750" letter-spacing="-1">340</text>
+  <text x="395.2" y="149" class="mono micro">COMMITS</text>
+
+    
+  <text x="547.1999999999999" y="126" class="display" fill="#F3F0EA" font-size="32" font-weight="750" letter-spacing="-1">37</text>
+  <text x="547.1999999999999" y="149" class="mono micro">PULL REQUESTS</text>
+
+    
+  <text x="395.2" y="206" class="display" fill="#F3F0EA" font-size="32" font-weight="750" letter-spacing="-1">12</text>
+  <text x="395.2" y="229" class="mono micro">STARS EARNED</text>
+
+    
+  <text x="547.1999999999999" y="206" class="display" fill="#F3F0EA" font-size="32" font-weight="750" letter-spacing="-1">22</text>
+  <text x="547.1999999999999" y="229" class="mono micro">REVIEWS</text>
+
+    <line x1="36" y1="266" x2="724" y2="266" stroke="#2B302D"/>
+    <polyline points="38.0,301.5 42.0,302.0 46.0,302.1 50.0,302.0 54.0,301.5 58.0,300.7 62.0,299.6 66.0,298.3 70.0,297.0 74.0,295.8 78.0,294.8 82.0,294.2 86.0,294.1 90.0,294.5 94.0,295.4 98.0,296.7 102.0,298.4 106.0,300.3 110.0,302.3 114.0,304.1 118.0,305.6 122.0,306.6 126.0,307.1 130.0,307.0 134.0,306.4 138.0,305.3 142.0,304.0 146.0,302.6 150.0,301.3 154.0,300.3 158.0,299.9 162.0,300.0 166.0,300.9 170.0,302.4 174.0,304.5 178.0,306.9 182.0,309.6 186.0,312.1 190.0,314.4 194.0,316.1 198.0,317.0 202.0,317.0 206.0,316.2 210.0,314.6 214.0,312.3 218.0,309.5 222.0,306.6 226.0,303.7 230.0,301.3 234.0,299.5 238.0,298.5 242.0,298.4 246.0,299.1 250.0,300.6 254.0,302.6 258.0,304.8 262.0,306.9 266.0,308.7 270.0,309.7 274.0,309.9 278.0,309.0 282.0,307.1 286.0,304.2 290.0,300.6 294.0,296.5 298.0,292.3 302.0,288.4 306.0,285.2 310.0,282.9 314.0,281.7 318.0,281.7 322.0,283.0 326.0,285.3 330.0,288.3 334.0,291.9 338.0,295.4 342.0,298.6 346.0,301.1 350.0,302.5" stroke="#C8FF4D" stroke-width="1.5" fill="none" opacity=".9"/>
+    <text x="724" y="306" text-anchor="end" class="mono micro">REPOS 48 / MERGED 28 / ISSUES 6</text>
+  
+</svg>
