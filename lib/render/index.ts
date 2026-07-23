@@ -107,21 +107,36 @@ export const renderCard = async (
         fetchProfileData(username, {
           period,
           excludeLanguages: parseList(params.get("exclude_langs")),
-          maxRepoPages: parseInteger(params.get("repo_pages"), 3, 1, 5),
+          maxRepoPages: parseInteger(params.get("repo_pages"), 1, 1, 5),
         }),
         fetchProfileData(compareUsername, {
           period,
           excludeLanguages: parseList(params.get("exclude_langs")),
-          maxRepoPages: parseInteger(params.get("repo_pages"), 3, 1, 5),
+          maxRepoPages: parseInteger(params.get("repo_pages"), 1, 1, 5),
         }),
       ]);
       return { svg: renderCompare(left, right, context), context };
     }
 
+    const lightweightKinds = new Set<CardKind>([
+      "activity",
+      "profile",
+      "streak",
+      "pulse",
+      "timeline",
+      "year",
+      "ticker",
+    ]);
+    const defaultRepoPages = lightweightKinds.has(kind) ? 1 : 3;
     const profile = await fetchProfileData(username, {
       period: params.get("period") === "all" ? "all" : "year",
       excludeLanguages: parseList(params.get("exclude_langs")),
-      maxRepoPages: parseInteger(params.get("repo_pages"), 3, 1, 5),
+      maxRepoPages: parseInteger(
+        params.get("repo_pages"),
+        defaultRepoPages,
+        1,
+        5,
+      ),
     });
 
     if (kind === "social") {

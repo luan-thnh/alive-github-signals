@@ -444,14 +444,24 @@ export const fetchSocialAccounts = async (
 export const fetchAvatarDataUri = async (
   avatarUrl: string,
 ): Promise<string | null> => {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 1_800);
   try {
-    const response = await fetch(avatarUrl, { cache: "force-cache" });
+    const sizedUrl = new URL(avatarUrl);
+    sizedUrl.searchParams.set("s", "160");
+    const response = await fetch(sizedUrl, {
+      cache: "force-cache",
+      signal: controller.signal,
+      headers: { Accept: "image/avif,image/webp,image/png,image/jpeg" },
+    });
     if (!response.ok) return null;
     const contentType = response.headers.get("content-type") || "image/png";
     const buffer = Buffer.from(await response.arrayBuffer());
-    if (buffer.byteLength > 512_000) return null;
+    if (buffer.byteLength > 256_000) return null;
     return `data:${contentType};base64,${buffer.toString("base64")}`;
   } catch {
     return null;
+  } finally {
+    clearTimeout(timeout);
   }
 };

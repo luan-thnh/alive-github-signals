@@ -30,9 +30,9 @@ The project is not a collection of static screenshots. Each user-backed endpoint
 There is no bundled sample profile, bundled user values or fallback account. GitHub failures
 produce an explicit error SVG.
 
-## What is new in v1.3
+## What is new in v1.3.3
 
-Eight new real-data components:
+Responsive component composition and a stable Language Orbit are included alongside the real-data component set:
 
 - **Developer Radar** — six-axis activity map derived from real GitHub metrics.
 - **Language Constellation** — animated language nodes weighted by repository code mass.
@@ -262,3 +262,35 @@ npm run preview:generate
 ## License
 
 MIT © luanthnh
+
+## Upgrading from v1.1 or v1.2
+
+Do not only copy the new files over the old repository. Removed files must also
+be deleted from Git:
+
+```bash
+git rm -f lib/demo.ts 2>/dev/null || true
+git rm -f tests/render.test.ts 2>/dev/null || true
+git rm -f scripts/render-previews.ts 2>/dev/null || true
+git add -A
+git commit -m "fix: remove legacy demo runtime"
+```
+
+Version 1.3.1 also runs an automatic cleanup before build and type-check, so a
+stale `lib/demo.ts` cannot break a Vercel deployment.
+
+
+## GitHub profile responsive usage
+
+GitHub Markdown tables remain multi-column on narrow screens. For profile READMEs,
+render each live component as a separate full-width image:
+
+```html
+<img
+  src="https://your-domain.vercel.app/api/languages?username=USER&layout=orbit&width=1200&height=430"
+  width="100%"
+  alt="Language orbit"
+/>
+```
+
+Version 1.3.3 keeps orbit circle geometry static so GitHub Camo cannot displace it.

@@ -12,8 +12,11 @@ export const svgResponse = (
   const etag = `W/\"${createHash("sha1").update(svg).digest("hex")}\"`;
   const headers = new Headers({
     "Content-Type": "image/svg+xml; charset=utf-8",
-    "Cache-Control": `public, max-age=300, s-maxage=${cacheSeconds}, stale-while-revalidate=86400`,
+    "Cache-Control": `public, max-age=${Math.min(cacheSeconds, 3600)}, s-maxage=${cacheSeconds}, stale-while-revalidate=86400`,
+    "CDN-Cache-Control": `public, s-maxage=${cacheSeconds}, stale-while-revalidate=86400`,
+    "Vercel-CDN-Cache-Control": `public, s-maxage=${cacheSeconds}, stale-while-revalidate=86400`,
     "Access-Control-Allow-Origin": "*",
+    "Cross-Origin-Resource-Policy": "cross-origin",
     "X-Content-Type-Options": "nosniff",
     "X-Alive-Card": kind,
     "X-Alive-Theme": params.get("theme") || "alive",

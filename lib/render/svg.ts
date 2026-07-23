@@ -92,6 +92,14 @@ export const sharedDefs = (
       @keyframes alive-orbit-reverse {
         to { transform:rotate(-360deg); }
       }
+      @keyframes alive-orbit-stroke {
+        from { stroke-dashoffset:0; }
+        to { stroke-dashoffset:-1000; }
+      }
+      @keyframes alive-orbit-stroke-reverse {
+        from { stroke-dashoffset:0; }
+        to { stroke-dashoffset:1000; }
+      }
       @keyframes alive-draw {
         0% { stroke-dashoffset:1000; opacity:.12; }
         55% { opacity:1; }
@@ -156,6 +164,8 @@ export const sharedDefs = (
       .drift { transform-box:fill-box; transform-origin:center; animation:alive-drift 4.8s ease-in-out infinite; }
       .orbit { transform-box:fill-box; transform-origin:center; animation:alive-orbit 16s linear infinite; }
       .orbit-reverse { transform-box:fill-box; transform-origin:center; animation:alive-orbit-reverse 21s linear infinite; }
+      .orbit-stroke { animation:alive-orbit-stroke 18s linear infinite; }
+      .orbit-stroke-reverse { animation:alive-orbit-stroke-reverse 23s linear infinite; }
       .frame-draw, .line-draw {
         stroke-dasharray:1000;
         animation:alive-draw 1.55s cubic-bezier(.3,.7,.2,1) both;

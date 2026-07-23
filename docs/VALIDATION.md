@@ -18,3 +18,11 @@ The complete Next.js build requires installed npm dependencies:
 npm install
 npm run check
 ```
+
+## v1.3.1 build regression
+
+- Release archive does not contain `lib/demo.ts`.
+- `clean:legacy` removes stale demo and generated files.
+- Cleanup runs before build, type-check, tests and development.
+- `tsconfig.json` excludes known v1.1 legacy files.
+- No mock `ProfileData` object was introduced.

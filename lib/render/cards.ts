@@ -42,8 +42,8 @@ const ring = ({
   const ratio = Math.min(1, Math.max(0, value / Math.max(1, max)));
   const dash = circumference * ratio;
   return `
-    <circle class="orbit-reverse" cx="${cx}" cy="${cy}" r="${radius}" stroke="${theme.border}" stroke-width="8" stroke-dasharray="3 9"/>
-    <circle class="orbit line-draw" cx="${cx}" cy="${cy}" r="${radius}" stroke="${theme.accent}" stroke-width="8" stroke-linecap="square" stroke-dasharray="${dash} ${circumference - dash}" transform="rotate(-90 ${cx} ${cy})"/>
+    <circle class="orbit-stroke-reverse" cx="${cx}" cy="${cy}" r="${radius}" stroke="${theme.border}" stroke-width="8" stroke-dasharray="3 9"/>
+    <circle class="orbit-stroke" cx="${cx}" cy="${cy}" r="${radius}" stroke="${theme.accent}" stroke-width="8" stroke-linecap="square" stroke-dasharray="${dash} ${circumference - dash}" transform="rotate(-90 ${cx} ${cy})"/>
     ${label ? `<text x="${cx}" y="${cy + 4}" text-anchor="middle" class="mono micro">${escapeXml(label)}</text>` : ""}
   `;
 };
@@ -185,7 +185,23 @@ export const renderLanguages = (data: ProfileData, context: RenderContext): stri
         const radius = 96 - index * 10;
         const dash = (Math.PI * 2 * radius * language.percentage) / 100;
         const gap = Math.PI * 2 * radius - dash;
-        const output = `<circle class="${index % 2 === 0 ? "orbit" : "orbit-reverse"} line-draw" cx="${cx}" cy="${cy}" r="${radius}" stroke="${languageColor(index, theme)}" stroke-width="7" stroke-dasharray="${dash} ${gap}" transform="rotate(${angle} ${cx} ${cy})"/>`;
+        const endAngle = ((angle + sweep) * Math.PI) / 180;
+        const nodeX = cx + Math.cos(endAngle) * radius;
+        const nodeY = cy + Math.sin(endAngle) * radius;
+        const output = `
+          <circle cx="${cx}" cy="${cy}" r="${radius}"
+            stroke="${languageColor(index, theme)}"
+            stroke-width="7"
+            stroke-linecap="square"
+            stroke-dasharray="${dash} ${gap}"
+            transform="rotate(${angle} ${cx} ${cy})"
+            opacity="${Math.max(.34, 1 - index * .09).toFixed(2)}"/>
+          <circle cx="${nodeX.toFixed(2)}" cy="${nodeY.toFixed(2)}"
+            r="${index === 0 ? 5 : 3.5}"
+            fill="${languageColor(index, theme)}"
+            class="pulse"
+            style="animation-delay:${index * -240}ms"/>
+        `;
         angle += sweep;
         return output;
       })
@@ -765,8 +781,8 @@ export const renderConstellation = (data: ProfileData, context: RenderContext): 
   const body = `
     ${outerFrame(width, height, theme)}
     ${headerRail({ index: "15", label: "Language Constellation", width, theme, status: "REAL / LANGUAGE MASS" })}
-    <circle class="orbit" cx="${cx}" cy="${cy}" r="${orbitRadius}" fill="none" stroke="${theme.border}" stroke-dasharray="3 13"/>
-    <circle class="orbit-reverse" cx="${cx}" cy="${cy}" r="${orbitRadius * .76}" fill="none" stroke="${theme.border}" stroke-dasharray="2 10"/>
+    <circle class="orbit-stroke" cx="${cx}" cy="${cy}" r="${orbitRadius}" fill="none" stroke="${theme.border}" stroke-dasharray="3 13"/>
+    <circle class="orbit-stroke-reverse" cx="${cx}" cy="${cy}" r="${orbitRadius * .76}" fill="none" stroke="${theme.border}" stroke-dasharray="2 10"/>
     <circle cx="${cx}" cy="${cy}" r="60" fill="url(#alive-aura)"/>
     <circle class="breathe" cx="${cx}" cy="${cy}" r="34" fill="${theme.surface}" stroke="${theme.accent}"/>
     <text x="${cx}" y="${cy - 4}" text-anchor="middle" class="display text" font-size="${data.login.length > 13 ? 14 : 20}" font-weight="800">${escapeXml(truncate(data.login.toUpperCase(), 18))}</text>

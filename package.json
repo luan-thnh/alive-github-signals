@@ -1,13 +1,18 @@
 {
   "name": "alive-github-signals",
-  "version": "1.3.0",
+  "version": "1.3.3",
   "private": true,
   "type": "module",
   "scripts": {
+    "clean:legacy": "node scripts/clean-legacy.mjs",
+    "predev": "npm run clean:legacy",
     "dev": "next dev",
+    "prebuild": "npm run clean:legacy",
     "build": "next build",
     "start": "next start",
+    "pretypecheck": "npm run clean:legacy",
     "typecheck": "tsc --noEmit",
+    "pretest": "npm run clean:legacy",
     "test": "node --import tsx --test tests/*.test.ts",
     "preview:generate": "tsx scripts/render-live-previews.ts",
     "check": "npm run typecheck && npm run test && npm run build"
