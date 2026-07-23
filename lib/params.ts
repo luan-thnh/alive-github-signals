@@ -41,6 +41,17 @@ export const CARD_ALIASES: Record<string, CardKind> = {
   versus: "compare",
   ticker: "ticker",
   marquee: "ticker",
+  overview: "overview",
+  identity: "overview",
+  "profile-board": "overview",
+  projects: "projects",
+  "project-board": "projects",
+  portfolio: "projects",
+  "signal-board": "signal-board",
+  fieldboard: "signal-board",
+  "field-board": "signal-board",
+  "year-board": "year-board",
+  "recap-board": "year-board",
 };
 
 export const parseCardKind = (value: string): CardKind | null =>

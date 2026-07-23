@@ -30,10 +30,14 @@ The project is not a collection of static screenshots. Each user-backed endpoint
 There is no bundled sample profile, bundled user values or fallback account. GitHub failures
 produce an explicit error SVG.
 
-## What is new in v1.3.3
+## What is new in v1.3.4
 
-Responsive component composition and a stable Language Orbit are included alongside the real-data component set:
+Four composition endpoints now create varied desktop layouts inside one responsive SVG:
 
+- **System Overview Board** — identity, metrics, materials, and recent systems in a 61/39 layout.
+- **Project Board** — one featured repository and a stacked recent-system queue.
+- **Signal Board** — radar, fixed language orbit, and language-density rails.
+- **Year Board** — annual recap, weekly pulse, and monthly timeline.
 - **Developer Radar** — six-axis activity map derived from real GitHub metrics.
 - **Language Constellation** — animated language nodes weighted by repository code mass.
 - **Contribution Pulse** — compact 52-week contribution waveform.
@@ -294,3 +298,17 @@ render each live component as a separate full-width image:
 ```
 
 Version 1.3.3 keeps orbit circle geometry static so GitHub Camo cannot displace it.
+
+
+## Composition endpoints
+
+```text
+/api/overview?username=luan-thnh
+/api/projects?username=luan-thnh
+/api/signal-board?username=luan-thnh
+/api/year-board?username=luan-thnh
+```
+
+These endpoints keep the README image at `width=100%` while creating asymmetric
+60/40 and featured/stacked layouts inside the SVG. This avoids GitHub table
+problems on mobile without forcing every section to look like a single-column card.

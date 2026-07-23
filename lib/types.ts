@@ -18,7 +18,11 @@ export type CardKind =
   | "repos"
   | "year"
   | "compare"
-  | "ticker";
+  | "ticker"
+  | "overview"
+  | "projects"
+  | "signal-board"
+  | "year-board";
 
 export type ThemeName = "alive" | "paper" | "cobalt" | "ember" | "mono";
 

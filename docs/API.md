@@ -202,3 +202,15 @@ This route renders query-controlled artwork and does not claim GitHub metrics.
 
 Invalid queries and GitHub failures are returned as designed SVG error cards.
 No user-backed endpoint substitutes bundled values.
+
+
+## Composition boards
+
+| Endpoint | Purpose |
+|---|---|
+| `/api/overview` | Identity, live metrics, primary material, and recent systems |
+| `/api/projects` | Featured project with a secondary repository queue |
+| `/api/signal-board` | Radar, language orbit, and language density |
+| `/api/year-board` | Annual recap, 52-week pulse, and monthly timeline |
+
+All composition boards require `username` and use real GitHub data.

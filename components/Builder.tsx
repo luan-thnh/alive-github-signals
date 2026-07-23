@@ -22,7 +22,11 @@ type Endpoint =
   | "badge"
   | "social"
   | "button"
-  | "status";
+  | "status"
+  | "overview"
+  | "projects"
+  | "signal-board"
+  | "year-board";
 
 type PreviewState = "loading" | "ready" | "error";
 
@@ -33,6 +37,9 @@ type EndpointOption = {
 };
 
 const endpointOptions: EndpointOption[] = [
+  { value: "overview", label: "System Overview Board", group: "Profile" },
+  { value: "signal-board", label: "Asymmetric Signal Board", group: "Profile" },
+  { value: "year-board", label: "Asymmetric Year Board", group: "Profile" },
   { value: "signal", label: "Full Signal Panel", group: "Profile" },
   { value: "stats", label: "Core Statistics", group: "Profile" },
   { value: "radar", label: "Developer Radar", group: "Profile" },
@@ -46,6 +53,7 @@ const endpointOptions: EndpointOption[] = [
   { value: "activity", label: "Contribution Calendar", group: "Activity" },
   { value: "languages", label: "Language Field", group: "Activity" },
   { value: "constellation", label: "Language Constellation", group: "Activity" },
+  { value: "projects", label: "Asymmetric Project Board", group: "Repository" },
   { value: "repos", label: "Recent Repository Stack", group: "Repository" },
   { value: "repo", label: "Repository Specimen", group: "Repository" },
   { value: "ticker", label: "Live Metrics Ticker", group: "Compact" },

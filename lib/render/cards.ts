@@ -968,6 +968,270 @@ export const renderTicker = (data: ProfileData, context: RenderContext): string 
   return svgDocument({ width, height, theme, body, title: `${data.login} live metric ticker`, description: "Animated ticker of real GitHub metrics", animate: context.animate });
 };
 
+
+
+export const renderOverview = (data: ProfileData, context: RenderContext): string => {
+  const width = context.width;
+  const height = context.height ?? 480;
+  const { theme } = context;
+  const displayName = truncate(data.name || data.login, 28);
+  const bio = truncate(data.bio, 110) || "BUILDING USEFUL SYSTEMS BETWEEN DESIGN AND ENGINEERING.";
+  const topLanguage = data.languages[0];
+  const recent = data.recentRepositories.filter((repo) => !repo.isArchived).slice(0, 3);
+  const divider = Math.round(width * .61);
+  const body = `
+    ${outerFrame(width, height, theme)}
+    ${headerRail({ index: "21", label: "System Overview", width, theme, status: "REAL / PROFILE COMPOSITION" })}
+
+    <text x="42" y="119" class="mono accent" font-size="11" letter-spacing="1.8">@${escapeXml(data.login.toUpperCase())} / IDENTITY NODE</text>
+    <text x="38" y="184" class="display text" font-size="62" font-weight="820" letter-spacing="-3">${escapeXml(displayName.toUpperCase())}</text>
+    <text x="42" y="220" class="mono label">${escapeXml(bio.toUpperCase())}</text>
+    <line x1="42" y1="250" x2="${divider - 32}" y2="250" stroke="${theme.border}"/>
+
+    <text x="42" y="302" class="display accent" font-size="54" font-weight="820" letter-spacing="-2">${formatNumber(data.contributions)}</text>
+    <text x="44" y="328" class="mono micro">CONTRIBUTIONS / LAST 12 MONTHS</text>
+    ${metricBlock(272, 300, data.repositories, "public systems", theme)}
+    ${metricBlock(438, 300, data.followers, "followers", theme, { compact: true })}
+
+    <text x="42" y="382" class="mono accent" font-size="10" letter-spacing="1.6">PRIMARY MATERIAL</text>
+    <text x="42" y="424" class="display text" font-size="34" font-weight="780">${escapeXml((topLanguage?.name ?? "UNSPECIFIED").toUpperCase())}</text>
+    <text x="${divider - 34}" y="424" text-anchor="end" class="mono micro">${topLanguage ? percent(topLanguage.percentage) : "0%"} / INDEXED CODE MASS</text>
+
+    <line x1="${divider}" y1="98" x2="${divider}" y2="${height - 36}" stroke="${theme.border}"/>
+    <text x="${divider + 34}" y="120" class="mono accent" font-size="10" letter-spacing="1.6">LIVE OPERATING METRICS</text>
+    ${metricBlock(divider + 34, 176, data.commits, "commits", theme, { accent: true })}
+    ${metricBlock(divider + 230, 176, data.pullRequests, "pull requests", theme)}
+    ${metricBlock(divider + 34, 258, data.stars, "stars earned", theme, { compact: true })}
+    ${metricBlock(divider + 230, 258, data.longestStreak, "longest streak", theme)}
+
+    <line x1="${divider + 34}" y1="298" x2="${width - 40}" y2="298" stroke="${theme.border}"/>
+    <text x="${divider + 34}" y="326" class="mono accent" font-size="10" letter-spacing="1.5">RECENTLY UPDATED</text>
+    ${recent.map((repo, index) => {
+      const y = 360 + index * 34;
+      return `<g class="metric-rise" style="animation-delay:${index * 100}ms">
+        <text x="${divider + 34}" y="${y}" class="mono micro">${String(index + 1).padStart(2, "0")}</text>
+        <text x="${divider + 72}" y="${y}" class="mono text" font-size="11">${escapeXml(truncate(repo.name.toUpperCase(), 28))}</text>
+        <text x="${width - 40}" y="${y}" text-anchor="end" class="mono micro">${escapeXml((repo.primaryLanguage || "—").toUpperCase())}</text>
+      </g>`;
+    }).join("")}
+
+    ${waveform(divider + 34, height - 35, width - divider - 78, theme, data.contributions % 29)}
+  `;
+  return svgDocument({ width, height, theme, body, title: `${data.login} system overview`, description: "Asymmetric profile overview composed from real GitHub data", animate: context.animate });
+};
+
+export const renderProjectsBoard = (data: ProfileData, context: RenderContext): string => {
+  const width = context.width;
+  const height = context.height ?? 600;
+  const { theme } = context;
+  const repos = data.recentRepositories.filter((repo) => !repo.isArchived).slice(0, 5);
+  if (!repos.length) throw new Error(`No recent repositories are available for ${data.login}.`);
+  const featured = repos[0]!;
+  const secondary = repos.slice(1);
+  const split = Math.round(width * .625);
+  const date = (value: string): string => new Date(value).toLocaleDateString("en-US", { month: "short", day: "2-digit", year: "numeric", timeZone: "UTC" }).toUpperCase();
+  const body = `
+    ${outerFrame(width, height, theme)}
+    ${headerRail({ index: "22", label: "Project Index", width, theme, status: "REAL / RECENT SYSTEMS" })}
+
+    <rect x="34" y="98" width="${split - 54}" height="${height - 138}" fill="${theme.surface}" stroke="${theme.border}"/>
+    <text x="62" y="136" class="mono accent" font-size="10" letter-spacing="1.7">FEATURED / LAST UPDATED</text>
+    <text x="58" y="208" class="display text" font-size="52" font-weight="820" letter-spacing="-2.5">${escapeXml(truncate(featured.name.toUpperCase(), 26))}</text>
+    <text x="62" y="244" class="mono label">${escapeXml(truncate(featured.description || "NO DESCRIPTION PUBLISHED", 88).toUpperCase())}</text>
+
+    <circle cx="${split - 132}" cy="192" r="82" fill="url(#alive-aura)" opacity=".7"/>
+    <circle cx="${split - 132}" cy="192" r="60" fill="none" stroke="${theme.accent}" stroke-opacity=".55" stroke-dasharray="4 12" class="orbit-stroke"/>
+    <circle cx="${split - 132}" cy="192" r="8" fill="${theme.accent}" class="pulse"/>
+
+    <line x1="62" y1="286" x2="${split - 42}" y2="286" stroke="${theme.border}"/>
+    ${metricBlock(62, 338, featured.stars, "stars", theme, { accent: true })}
+    ${metricBlock(206, 338, featured.forks, "forks", theme)}
+    ${metricBlock(350, 338, featured.primaryLanguage || "—", "primary material", theme)}
+
+    <text x="62" y="414" class="mono accent" font-size="10" letter-spacing="1.6">SYSTEM NOTES</text>
+    <text x="62" y="448" class="mono label">UPDATED / ${date(featured.updatedAt)}</text>
+    <text x="62" y="478" class="mono label">STATUS / ACTIVE REPOSITORY</text>
+    <path d="M62 ${height - 64}H${split - 72}L${split - 48} ${height - 42}" stroke="${theme.accent}" stroke-width="2" fill="none" class="line-draw"/>
+    <text x="${split - 44}" y="${height - 38}" text-anchor="end" class="mono micro">GITHUB.COM/${escapeXml(data.login.toUpperCase())}/${escapeXml(featured.name.toUpperCase())}</text>
+
+    <line x1="${split}" y1="98" x2="${split}" y2="${height - 36}" stroke="${theme.border}"/>
+    <text x="${split + 28}" y="128" class="mono accent" font-size="10" letter-spacing="1.6">RECENT SYSTEM QUEUE</text>
+    ${secondary.map((repo, index) => {
+      const rowTop = 150 + index * 104;
+      return `<g class="metric-rise" style="animation-delay:${index * 90}ms">
+        <text x="${split + 28}" y="${rowTop + 20}" class="mono micro">${String(index + 2).padStart(2, "0")}</text>
+        <text x="${split + 66}" y="${rowTop + 20}" class="display text" font-size="22" font-weight="760">${escapeXml(truncate(repo.name.toUpperCase(), 26))}</text>
+        <text x="${split + 66}" y="${rowTop + 46}" class="mono micro">${escapeXml(truncate(repo.description || "NO DESCRIPTION", 52).toUpperCase())}</text>
+        <text x="${split + 66}" y="${rowTop + 72}" class="mono accent" font-size="9">${escapeXml((repo.primaryLanguage || "UNSPECIFIED").toUpperCase())}</text>
+        <text x="${width - 40}" y="${rowTop + 72}" text-anchor="end" class="mono micro">STAR ${repo.stars} / FORK ${repo.forks}</text>
+        <line x1="${split + 28}" y1="${rowTop + 92}" x2="${width - 40}" y2="${rowTop + 92}" stroke="${theme.border}"/>
+      </g>`;
+    }).join("")}
+  `;
+  return svgDocument({ width, height, theme, body, title: `${data.login} project index`, description: "Asymmetric real repository project board", animate: context.animate });
+};
+
+export const renderSignalBoard = (data: ProfileData, context: RenderContext): string => {
+  const width = context.width;
+  const height = context.height ?? 620;
+  const { theme } = context;
+  const leftW = Math.round(width * .56);
+  const radarCx = Math.round(leftW * .49);
+  const radarCy = 326;
+  const radarRadius = 166;
+  const languages = data.languages.slice(0, 7);
+  const axes = [
+    { label: "CODE", value: data.commits, cap: 3000 },
+    { label: "SHIP", value: data.repositories + data.pullRequests, cap: 250 },
+    { label: "COLLAB", value: data.reviews + data.mergedPullRequests, cap: 180 },
+    { label: "IMPACT", value: data.stars + data.followers, cap: 1200 },
+    { label: "STREAK", value: data.longestStreak, cap: 365 },
+    { label: "ACTIVITY", value: data.contributions, cap: 5000 },
+  ];
+  const radarRings = [0.25, .5, .75, 1].map((ratio) => {
+    const points = axes.map((_, index) => {
+      const angle = -Math.PI / 2 + index * (Math.PI * 2 / axes.length);
+      const point = polarPoint(radarCx, radarCy, radarRadius * ratio, angle);
+      return `${point.x.toFixed(1)},${point.y.toFixed(1)}`;
+    }).join(" ");
+    return `<polygon points="${points}" fill="none" stroke="${theme.border}" opacity="${ratio}"/>`;
+  }).join("");
+  const radarAxes = axes.map((axis, index) => {
+    const angle = -Math.PI / 2 + index * (Math.PI * 2 / axes.length);
+    const end = polarPoint(radarCx, radarCy, radarRadius, angle);
+    const labelPoint = polarPoint(radarCx, radarCy, radarRadius + 28, angle);
+    const anchor = labelPoint.x < radarCx - 10 ? "end" : labelPoint.x > radarCx + 10 ? "start" : "middle";
+    return `<line x1="${radarCx}" y1="${radarCy}" x2="${end.x.toFixed(1)}" y2="${end.y.toFixed(1)}" stroke="${theme.border}"/>
+      <text x="${labelPoint.x.toFixed(1)}" y="${labelPoint.y.toFixed(1)}" text-anchor="${anchor}" class="mono micro">${axis.label}</text>`;
+  }).join("");
+  const dataPoints = axes.map((axis, index) => {
+    const angle = -Math.PI / 2 + index * (Math.PI * 2 / axes.length);
+    const point = polarPoint(radarCx, radarCy, radarRadius * logRatio(axis.value, axis.cap), angle);
+    return `${point.x.toFixed(1)},${point.y.toFixed(1)}`;
+  }).join(" ");
+
+  const orbitCx = Math.round(leftW + (width - leftW) * .38);
+  const orbitCy = 224;
+  let angle = -90;
+  const rings = languages.slice(0, 5).map((language, index) => {
+    const sweep = language.percentage * 3.6;
+    const radius = 88 - index * 13;
+    const circumference = Math.PI * 2 * radius;
+    const dash = circumference * (language.percentage / 100);
+    const endAngle = ((angle + sweep) * Math.PI) / 180;
+    const nodeX = orbitCx + Math.cos(endAngle) * radius;
+    const nodeY = orbitCy + Math.sin(endAngle) * radius;
+    const output = `<circle cx="${orbitCx}" cy="${orbitCy}" r="${radius}" stroke="${languageColor(index, theme)}" stroke-width="7" stroke-dasharray="${dash} ${circumference - dash}" transform="rotate(${angle} ${orbitCx} ${orbitCy})" opacity="${Math.max(.4, 1-index*.1).toFixed(2)}"/>
+      <circle class="pulse" style="animation-delay:${index * -220}ms" cx="${nodeX.toFixed(2)}" cy="${nodeY.toFixed(2)}" r="${index === 0 ? 5 : 3.5}" fill="${languageColor(index, theme)}"/>`;
+    angle += sweep;
+    return output;
+  }).join("");
+
+  const body = `
+    ${outerFrame(width, height, theme)}
+    ${headerRail({ index: "23", label: "Signal Field", width, theme, status: "REAL / ASYMMETRIC COMPOSITION" })}
+
+    <text x="42" y="112" class="mono accent" font-size="10" letter-spacing="1.6">DEVELOPER RADAR / NORMALIZED</text>
+    <circle cx="${radarCx}" cy="${radarCy}" r="${radarRadius + 32}" fill="url(#alive-aura)" opacity=".28"/>
+    ${radarRings}${radarAxes}
+    <polygon class="radar-polygon" points="${dataPoints}" fill="${theme.accent}22" stroke="${theme.accent}" stroke-width="2"/>
+    ${axes.map((axis, index) => {
+      const angle = -Math.PI / 2 + index * (Math.PI * 2 / axes.length);
+      const point = polarPoint(radarCx, radarCy, radarRadius * logRatio(axis.value, axis.cap), angle);
+      return `<circle class="pulse" style="animation-delay:${index*180}ms" cx="${point.x.toFixed(1)}" cy="${point.y.toFixed(1)}" r="4" fill="${theme.accent}"/>`;
+    }).join("")}
+    <text x="42" y="${height - 34}" class="mono micro">CODE ${formatNumber(data.commits, true)} / SHIP ${data.repositories + data.pullRequests} / COLLAB ${data.reviews + data.mergedPullRequests}</text>
+
+    <line x1="${leftW}" y1="96" x2="${leftW}" y2="${height - 36}" stroke="${theme.border}"/>
+    <text x="${leftW + 28}" y="112" class="mono accent" font-size="10" letter-spacing="1.6">LANGUAGE ORBIT / TOP MATERIALS</text>
+    <circle cx="${orbitCx}" cy="${orbitCy}" r="112" fill="url(#alive-aura)" opacity=".42"/>
+    ${rings}
+    <circle cx="${orbitCx}" cy="${orbitCy}" r="25" fill="${theme.surface}" stroke="${theme.border}"/>
+    <circle cx="${orbitCx}" cy="${orbitCy}" r="5" fill="${theme.accent}" class="pulse"/>
+    ${languages.slice(0, 5).map((language, index) => `<circle cx="${width - 220}" cy="${132 + index*30}" r="4" fill="${languageColor(index, theme)}"/>
+      <text x="${width - 204}" y="${136 + index*30}" class="mono label">${escapeXml(language.name.toUpperCase())}</text>
+      <text x="${width - 40}" y="${136 + index*30}" text-anchor="end" class="mono micro">${percent(language.percentage)}</text>`).join("")}
+
+    <line x1="${leftW + 28}" y1="354" x2="${width - 40}" y2="354" stroke="${theme.border}"/>
+    <text x="${leftW + 28}" y="384" class="mono accent" font-size="10" letter-spacing="1.6">LANGUAGE MASS / RELATIVE DENSITY</text>
+    ${languages.slice(0, 6).map((language, index) => {
+      const y = 420 + index * 29;
+      const max = languages[0]?.percentage || 1;
+      const barWidth = Math.max(4, (width - leftW - 250) * (language.percentage / max));
+      return `<text x="${leftW + 28}" y="${y}" class="mono micro">${String(index+1).padStart(2,"0")}</text>
+        <text x="${leftW + 64}" y="${y}" class="mono text" font-size="10">${escapeXml(language.name.toUpperCase())}</text>
+        <rect x="${leftW + 210}" y="${y-10}" width="${width-leftW-260}" height="9" fill="${theme.surfaceAlt}"/>
+        <rect class="bar-grow" style="animation-delay:${index*90}ms" x="${leftW + 210}" y="${y-10}" width="${barWidth.toFixed(1)}" height="9" fill="${languageColor(index, theme)}"/>
+        <text x="${width-40}" y="${y}" text-anchor="end" class="mono micro">${percent(language.percentage)}</text>`;
+    }).join("")}
+  `;
+  return svgDocument({ width, height, theme, body, title: `${data.login} signal field`, description: "Asymmetric radar and language composition from real GitHub data", animate: context.animate });
+};
+
+export const renderYearBoard = (data: ProfileData, context: RenderContext): string => {
+  const width = context.width;
+  const height = context.height ?? 600;
+  const { theme } = context;
+  const split = Math.round(width * .57);
+  const months = monthlyContributions(data.calendar);
+  const best = [...months].sort((a,b) => b.value - a.value)[0];
+  const activeDays = data.calendar.filter((day) => day.count > 0).length;
+  const average = data.calendar.length ? data.contributions / data.calendar.length : 0;
+  const topLanguage = data.languages[0];
+  const days = data.calendar.slice(-364);
+  const weeks = Array.from({ length: 52 }, (_, index) => days.slice(index*7, index*7+7).reduce((sum, day) => sum + day.count, 0));
+  const maxWeek = Math.max(1, ...weeks);
+  const pulsePoints = weeks.map((value, index) => {
+    const x = split + 38 + index * ((width - split - 78) / 51);
+    const y = 260 - (value / maxWeek) * 108;
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(" ");
+  const maxMonth = Math.max(1, ...months.map((month) => month.value));
+  const body = `
+    ${outerFrame(width, height, theme)}
+    ${headerRail({ index: "24", label: "Year Board", width, theme, status: "REAL / 12M COMPOSITION" })}
+
+    <text x="42" y="119" class="mono accent" font-size="10" letter-spacing="1.7">YEAR IN CODE / LAST 12 MONTHS</text>
+    <text x="36" y="230" class="display text" font-size="112" font-weight="840" letter-spacing="-6">${formatNumber(data.contributions)}</text>
+    <text x="44" y="260" class="mono micro">CONTRIBUTIONS RECORDED</text>
+    ${ring({ cx: split - 126, cy: 186, radius: 66, value: activeDays, max: 365, theme, label: "ACTIVE DAYS" })}
+    <text x="${split - 126}" y="181" text-anchor="middle" class="display text" font-size="32" font-weight="800">${activeDays}</text>
+    <text x="${split - 126}" y="204" text-anchor="middle" class="mono micro">OF 365</text>
+
+    <line x1="42" y1="302" x2="${split - 34}" y2="302" stroke="${theme.border}"/>
+    ${metricBlock(44, 354, best?.label ?? "—", "strongest month", theme, { accent: true })}
+    ${metricBlock(220, 354, best?.value ?? 0, "best month", theme)}
+    ${metricBlock(390, 354, data.longestStreak, "longest streak", theme)}
+
+    <text x="44" y="424" class="mono accent" font-size="10" letter-spacing="1.6">PRIMARY MATERIAL</text>
+    <text x="42" y="474" class="display text" font-size="48" font-weight="820">${escapeXml((topLanguage?.name ?? "UNSPECIFIED").toUpperCase())}</text>
+    <text x="44" y="503" class="mono micro">${topLanguage ? percent(topLanguage.percentage) : "0%"} INDEXED MASS / ${average.toFixed(1)} DAILY AVERAGE</text>
+    ${waveform(44, height - 40, split - 88, theme, activeDays % 17)}
+
+    <line x1="${split}" y1="96" x2="${split}" y2="${height - 36}" stroke="${theme.border}"/>
+    <text x="${split + 30}" y="119" class="mono accent" font-size="10" letter-spacing="1.7">CONTRIBUTION PULSE / 52 WEEKS</text>
+    <text x="${split + 30}" y="172" class="display text" font-size="42" font-weight="800">${weeks.at(-1) ?? 0}</text>
+    <text x="${split + 30}" y="198" class="mono micro">LATEST WEEK</text>
+    <polyline class="signal-wave" points="${pulsePoints}" stroke="${theme.accent}" stroke-width="2" fill="none"/>
+    <line x1="${split + 30}" y1="288" x2="${width - 40}" y2="288" stroke="${theme.border}"/>
+
+    <text x="${split + 30}" y="320" class="mono accent" font-size="10" letter-spacing="1.7">MONTHLY TIMELINE</text>
+    ${months.map((month, index) => {
+      const available = width - split - 90;
+      const barW = available / 12;
+      const barH = 150 * (month.value / maxMonth);
+      const x = split + 34 + index * barW;
+      const y = 510 - barH;
+      return `<g class="metric-rise" style="animation-delay:${index*60}ms">
+        <rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${Math.max(8,barW-8).toFixed(1)}" height="${barH.toFixed(1)}" fill="${month.label === best?.label ? theme.accent : theme.accent + '55'}"/>
+        <text x="${(x+(barW-8)/2).toFixed(1)}" y="536" text-anchor="middle" class="mono micro">${month.label.slice(0,1)}</text>
+      </g>`;
+    }).join("")}
+    <text x="${width - 40}" y="${height - 28}" text-anchor="end" class="mono micro">${data.repositories} REPOS / ${data.stars} STARS / ${data.followers} FOLLOWERS</text>
+  `;
+  return svgDocument({ width, height, theme, body, title: `${data.login} year board`, description: "Asymmetric year, pulse, and timeline composition from real GitHub data", animate: context.animate });
+};
+
 export const renderErrorCard = (
   message: string,
   context: Pick<RenderContext, "theme" | "width" | "animate">,

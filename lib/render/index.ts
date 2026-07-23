@@ -37,6 +37,10 @@ import {
   renderTicker,
   renderTimeline,
   renderYear,
+  renderOverview,
+  renderProjectsBoard,
+  renderSignalBoard,
+  renderYearBoard,
 } from "./cards";
 
 const defaults: Record<
@@ -63,6 +67,10 @@ const defaults: Record<
   year: { width: 940, height: 520, minWidth: 780, minHeight: 470 },
   compare: { width: 1040, height: 500, minWidth: 860, minHeight: 450 },
   ticker: { width: 1100, height: 64, minWidth: 640, minHeight: 58 },
+  overview: { width: 1200, height: 480, minWidth: 900, minHeight: 420 },
+  projects: { width: 1200, height: 600, minWidth: 900, minHeight: 520 },
+  "signal-board": { width: 1200, height: 620, minWidth: 900, minHeight: 540 },
+  "year-board": { width: 1200, height: 600, minWidth: 900, minHeight: 520 },
 };
 
 export const buildContext = (
@@ -180,6 +188,14 @@ export const renderCard = async (
         return { svg: renderYear(profile, context), context };
       case "ticker":
         return { svg: renderTicker(profile, context), context };
+      case "overview":
+        return { svg: renderOverview(profile, context), context };
+      case "projects":
+        return { svg: renderProjectsBoard(profile, context), context };
+      case "signal-board":
+        return { svg: renderSignalBoard(profile, context), context };
+      case "year-board":
+        return { svg: renderYearBoard(profile, context), context };
       default:
         throw new Error(`Unsupported card type: ${kind}`);
     }
